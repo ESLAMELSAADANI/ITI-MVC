@@ -1,9 +1,7 @@
 ﻿@{
 	Layout = null;
 }
-@{
-	object x = new { placeholder = "Enter Value Of x" };
-}
+
 <!DOCTYPE html>
 
 <html>
@@ -14,12 +12,8 @@
 </head>
 <body>
 	<form class="alert alert-light" action="/Test/Add">
-		@* <label for="textX">x</label> *@
-		 <label for="x">x</label> 
-		 <!-- Using Html Helper HTML Property To Write html code using C# syntax -->
-		@* <input id="textX" type="text" name="x" placeholder="Enter Value Of x" /> *@
-		
-		@Html.TextBox("x",10,x);
+		<label for="textX">x</label>
+		<input id="textX" type="text" name="x" placeholder="Enter Value Of x" />
 		<br/>
 		<br/>
 		<label for="textY">y</label>
