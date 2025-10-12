@@ -13,13 +13,12 @@
 	<link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
 </head>
 <body>
-	<form class="alert alert-light" action="/Test/Add">
+	<form class="alert alert-light" action="/Test/Add?x=80" method="post">
 		@* <label for="textX">x</label> *@
 		 <label for="x">x</label> 
 		 <!-- Using Html Helper HTML Property To Write html code using C# syntax -->
-		@* <input id="textX" type="text" name="x" placeholder="Enter Value Of x" /> *@
-		
-		@Html.TextBox("x",10,x);
+		@* <input id="textX" type="text" name="x" placeholder="Enter Value Of x" /> *@	
+		@Html.TextBox("x",10,x)
 		<br/>
 		<br/>
 		<label for="textY">y</label>

@@ -1,0 +1,33 @@
+﻿@model IEnumerable<Department>;//To Control/prevent edit on data returned from controller
+@{
+	ViewData["Title"] = "Index";
+}
+
+<table class="table table-bordered table-hover">
+	<thead>
+	<th>Id</th>
+	<th>Name</th>
+	<th>Capacity</th>
+	<th>Actions</th>
+	</thead>
+	<tbody>
+		@if (Model == null || Model.Count() == 0)
+		{
+			<tr>
+				<td colspan="4" align="center">No Departments Found</td>
+			</tr>
+		}
+		else
+		{
+			@for (int i = 0; i < Model.Count(); i++)
+			{
+				<tr>
+					<td>@Model.ElementAt(i).DeptId</td>
+					<td>@Model.ElementAt(i).DeptName</td>
+					<td>@Model.ElementAt(i).Capacity</td>
+				</tr>
+			}
+		}
+	</tbody>
+</table>
+
