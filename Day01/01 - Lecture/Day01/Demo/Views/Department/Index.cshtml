@@ -9,6 +9,7 @@
 	<th>Name</th>
 	<th>Capacity</th>
 	<th>Actions</th>
+	<th>Details</th>
 	</thead>
 	<tbody>
 		@if (Model == null || Model.Count() == 0)
@@ -25,6 +26,12 @@
 					<td>@Model.ElementAt(i).DeptId</td>
 					<td>@Model.ElementAt(i).DeptName</td>
 					<td>@Model.ElementAt(i).Capacity</td>
+					<td></td>
+					<td>
+						@* <a class="btn btn-info" href="/department/details/@Model.ElementAt(i).DeptId">Details</a> *@
+						<!--  Use Tag Helper -->
+						<a class="btn btn-info" asp-controller="department" asp-action="details" asp-route-id="@Model.ElementAt(i).DeptId">Details</a>
+					</td>
 				</tr>
 			}
 		}

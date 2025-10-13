@@ -1,0 +1,23 @@
+﻿@model Department
+@{
+	ViewData["Title"] = "Details View";
+}
+
+<h1>Department @Model.DeptName Details:</h1>
+<table class="table table-bordered table-hover">
+    <thead>
+		<th>Id</th>
+		<th>Name</th>
+		<th>Capacity</th>
+	</thead>
+	<tbody>
+		<tr>
+			<td>@Model.DeptId</td>
+			<td>@Model.DeptName</td>
+			<td>@Model.Capacity</td>
+		</tr>
+	</tbody>
+</table>
+<form action="/department/index">
+	<input type="submit" value="Return" class="btn btn-success"/>
+</form>

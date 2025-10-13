@@ -1,0 +1,23 @@
+﻿@model Department
+@{
+	ViewData["Title"] = "Create";
+}
+
+<h1>Add Department</h1>
+@* <form action="/department/create" method="post">
+	<input type="number" name="DeptId" placeholder="Enter DeptId" /><br />
+	<input type="text" name="DeptName" placeholder="Enter DeptName" /><br />
+	<input type="number" name="Capacity" placeholder="Enter Capacity" /><br />
+	<input type="submit" value="Add" class="btn btn-success" />
+</form> *@
+
+<!--      Use Tag Helper (asp-for)        -->
+@* <form  href="/department/create" method="post"> *@
+@* <form  method="post"> <!-- Automatically after click on Add button, will send request to server same as current URL request but with (Post) method => Post http:localhost:3040/department/create --> *@
+<form asp-controller="department" asp-action="create"><!-- Automatically after click on Add button, will send request to server same as current URL request but with (Post) method => Post http:localhost:3040/department/create -->
+	<input asp-for="@Model.DeptId" placeholder="Enter DeptId" /><br />
+	<input asp-for="@Model.DeptName" placeholder="Enter DeptName" /><br />
+	<input asp-for="@Model.Capacity" placeholder="Enter Capacity" /><br />
+	<input type="submit" value="Add" class="btn btn-success" />
+</form>
+

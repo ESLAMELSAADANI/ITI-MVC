@@ -1,4 +1,5 @@
 ﻿using Demo.DAL;
+using Demo.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Demo.Controllers
@@ -10,6 +11,41 @@ namespace Demo.Controllers
         {
             var model = dbContext.Department.ToList();
             return View(model);
+        }
+        //Show The Form Of Add New Department
+        [HttpGet] //ActionSelector say that this action work with Get Request Only
+        public IActionResult Create()
+        {
+            return View();
+        }
+        //Receive Data from request and save data to database.
+        [HttpPost]
+        public IActionResult Create(Department dept)
+        {
+            try
+            {
+                dbContext.Department.Add(dept);
+                dbContext.SaveChanges();
+                return RedirectToAction("index");
+            }
+            catch (Exception ex)
+            {
+
+                return View("exception", ex);
+            }
+        }
+
+        // department/details/500   =>  500 will binded to the passed parameter id [Route System Behavior]
+        public IActionResult Details(int? id)
+        {
+            if (id == null)//if user not enter value for id => /department/details
+            {
+                return BadRequest();
+            }
+            var dept = dbContext.Department.SingleOrDefault(d => d.DeptId == id);
+            if (dept == null)//if user enter id not match any dept in DB => /department/details/88888
+                return NotFound();
+            return View(dept);
         }
     }
 }

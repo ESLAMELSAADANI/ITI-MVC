@@ -38,7 +38,7 @@ namespace Demo.Migrations
 
                     b.HasKey("DeptId");
 
-                    b.ToTable("Department");
+                    b.ToTable("Department", (string)null);
 
                     b.HasData(
                         new
@@ -89,7 +89,7 @@ namespace Demo.Migrations
 
                     b.HasIndex("DeptNo");
 
-                    b.ToTable("Students");
+                    b.ToTable("Students", (string)null);
                 });
 
             modelBuilder.Entity("Demo.Models.Student", b =>
