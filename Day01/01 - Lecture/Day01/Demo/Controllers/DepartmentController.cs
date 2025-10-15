@@ -47,5 +47,65 @@ namespace Demo.Controllers
                 return NotFound();
             return View(dept);
         }
+
+        [HttpGet]
+        public IActionResult Edit(int? id)
+        {
+            if (id == null)//if user not enter value for id => /department/edit
+            {
+                return BadRequest();
+            }
+            var dept = dbContext.Department.SingleOrDefault(d => d.DeptId == id);
+            if (dept == null)//if user enter id not match any dept in DB => /department/edit/88888
+                return NotFound();
+            return View(dept);
+        }
+        [HttpPost]
+        public IActionResult Edit(Department dept)
+        {
+            try
+            {
+                dbContext.Department.Update(dept);
+                dbContext.SaveChanges();
+                return RedirectToAction("index");
+            }
+            catch (Exception ex)
+            {
+
+                return View("exception", ex);
+            }
+        }
+        
+        public IActionResult Delete(int? id)
+        {
+            try
+            {
+                var dept = dbContext.Department.SingleOrDefault(d => d.DeptId == id);
+                dbContext.Department.Remove(dept);
+                dbContext.SaveChanges();
+                return RedirectToAction("index");
+            }
+            catch (Exception ex)
+            {
+
+                return View("exception", ex);
+            }
+        }
+        [HttpPost]
+        public IActionResult Delete(Department dept)
+        {
+            try
+            {
+                //var dept = dbContext.Department.SingleOrDefault(d => d.DeptId == id);
+                dbContext.Department.Remove(dept);
+                dbContext.SaveChanges();
+                return RedirectToAction("index");
+            }
+            catch (Exception ex)
+            {
+
+                return View("exception", ex);
+            }
+        }
     }
 }

@@ -1,0 +1,26 @@
+﻿@model Student
+@{
+	ViewData["Title"] = "Details";
+}
+
+<h1>(@Model.Name) Details:</h1>
+<table class="table table-bordered table-hover">
+	<thead>
+		<tr>
+			<th>Id</th>
+			<th>Name</th>
+			<th>Age</th>
+			<th>DeptNo</th>
+			<th>DeptName</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>@Model.Id</td>
+			<td>@Model.Name</td>
+			<td>@Model.Age</td>
+			<td>@Model.DeptNo</td>
+			<td>@Model.Department?.DeptName</td>
+		</tr>
+	</tbody>
+</table>

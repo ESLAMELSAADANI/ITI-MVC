@@ -14,10 +14,17 @@
 <!--      Use Tag Helper (asp-for)        -->
 @* <form  href="/department/create" method="post"> *@
 @* <form  method="post"> <!-- Automatically after click on Add button, will send request to server same as current URL request but with (Post) method => Post http:localhost:3040/department/create --> *@
-<form asp-controller="department" asp-action="create"><!-- Automatically after click on Add button, will send request to server same as current URL request but with (Post) method => Post http:localhost:3040/department/create -->
-	<input asp-for="@Model.DeptId" placeholder="Enter DeptId" /><br />
-	<input asp-for="@Model.DeptName" placeholder="Enter DeptName" /><br />
-	<input asp-for="@Model.Capacity" placeholder="Enter Capacity" /><br />
+<form asp-controller="department" asp-action="create">
+	<!-- Automatically after click on Add button, will send request to server same as current URL request but with (Post) method => Post http:localhost:3040/department/create -->
+	<label asp-for="DeptId" class="col-form-label">Id</label><br />
+	<input class="form-control-sm" asp-for="@Model.DeptId" placeholder="Enter DeptId" /><br /><br />
+
+	<label asp-for="DeptName" class="col-form-label">Name</label><br />
+	<input class="form-control-sm" asp-for="@Model.DeptName" placeholder="Enter DeptName" /><br /><br />
+
+	<label asp-for="Capacity" class="col-form-label">Capacity</label><br />
+	<input class="form-control-sm" asp-for="@Model.Capacity" placeholder="Enter Capacity" /><br /><br />
+
 	<input type="submit" value="Add" class="btn btn-success" />
 </form>
 

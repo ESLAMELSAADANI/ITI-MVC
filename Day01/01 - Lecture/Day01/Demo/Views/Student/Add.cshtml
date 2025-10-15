@@ -1,0 +1,25 @@
+﻿@model StudentDepartment
+@{
+	ViewData["Title"] = "Add";
+	// SelectList deptsSelectList = new SelectList(Model.Departments, "DeptId", "DeptName");
+}
+
+<h1>Add New Student</h1>
+<form method="post">
+	<label asp-for="@Model.Student.Name" class="col-form-label">Name</label><br />
+	<input asp-for="@Model.Student.Name" placeholder="Enter The Name" class="form-control-sm" /><br /><br />
+
+	<label asp-for="@Model.Student.Age" class="col-form-label">Age</label><br />
+	<input asp-for="@Model.Student.Age" placeholder="Enter The Age" class="form-control-sm" /><br /><br />
+
+	<label asp-for="@Model.Student.DeptNo" class="col-form-label">DeptName</label><br />
+	<select class="form-select-sm" asp-items="@Model.DepartmentsSelectList" asp-for="@Model.Student.DeptNo">
+		@* @foreach (Department dept in Model.Departments)
+		{
+			<option value="@dept.DeptId">@dept.DeptName</option>
+		} *@
+	</select><br /><br />
+
+	<input type="submit" asp-action="add" value="Add" class="btn btn-success" />
+
+</form>

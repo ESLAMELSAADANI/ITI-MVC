@@ -1,0 +1,22 @@
+﻿@model StudentDepartment
+@{
+	ViewData["Title"] = "Edit";
+}
+
+<h1>Edit Student (@Model.Student.Name):</h1>
+<form method="post">
+	<input type="hidden" asp-for="@Model.Student.Id" />
+
+	<label class="col-form-label" asp-for="@Model.Student.Name">Name</label><br />
+	<input class="form-control-sm" type="text" asp-for="@Model.Student.Name" /><br /><br />
+
+	<label class="col-form-label" asp-for="@Model.Student.Age">Age</label><br />
+	<input class="form-control-sm" type="number" asp-for="@Model.Student.Age" /><br /><br />
+
+	<label class="col-form-label" asp-for="@Model.Student.DeptNo">DeptName</label><br />
+	<select class="form-select-sm" asp-items="@Model.DepartmentsSelectList" asp-for="@Model.Student.DeptNo">
+	</select><br /><br />
+
+	<button asp-controller="Student" asp-action="edit" class="btn btn-info">Edit</button>
+	<button asp-controller="Student" asp-action="delete" class="btn btn-danger">Delete</button>
+</form>
