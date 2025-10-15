@@ -31,7 +31,7 @@ namespace Demo.Controllers
             StudentDepartment studentDepartment = new StudentDepartment()
             {
                 Student = new Student(),
-                DepartmentsSelectList = new SelectList(depts, "DeptId", "DeptName")
+                Departments = dbContext.Department.ToList()
             };
 
             return View(studentDepartment);
@@ -55,8 +55,7 @@ namespace Demo.Controllers
             StudentDepartment studentDepartment = new StudentDepartment()
             {
                 Student = student,
-                DepartmentsSelectList = new SelectList(depts, "DeptId", "DeptName", student.DeptNo)
-
+                Departments = dbContext.Department.ToList()
             };
             return View(studentDepartment);
         }

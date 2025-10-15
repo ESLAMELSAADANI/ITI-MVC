@@ -1,7 +1,7 @@
 ﻿@model StudentDepartment
 @{
 	ViewData["Title"] = "Add";
-	// SelectList deptsSelectList = new SelectList(Model.Departments, "DeptId", "DeptName");
+	SelectList deptsSL = new SelectList(Model.Departments, "DeptId", "DeptName");
 }
 
 <h1>Add New Student</h1>
@@ -13,7 +13,7 @@
 	<input asp-for="@Model.Student.Age" placeholder="Enter The Age" class="form-control-sm" /><br /><br />
 
 	<label asp-for="@Model.Student.DeptNo" class="col-form-label">DeptName</label><br />
-	<select class="form-select-sm" asp-items="@Model.DepartmentsSelectList" asp-for="@Model.Student.DeptNo">
+	<select class="form-select-sm" asp-items="@deptsSL" asp-for="@Model.Student.DeptNo">
 		@* @foreach (Department dept in Model.Departments)
 		{
 			<option value="@dept.DeptId">@dept.DeptName</option>

@@ -1,6 +1,7 @@
 ﻿@model StudentDepartment
 @{
 	ViewData["Title"] = "Edit";
+	SelectList deptsSL = new SelectList(Model.Departments, "DeptId", "DeptName");
 }
 
 <h1>Edit Student (@Model.Student.Name):</h1>
@@ -14,7 +15,7 @@
 	<input class="form-control-sm" type="number" asp-for="@Model.Student.Age" /><br /><br />
 
 	<label class="col-form-label" asp-for="@Model.Student.DeptNo">DeptName</label><br />
-	<select class="form-select-sm" asp-items="@Model.DepartmentsSelectList" asp-for="@Model.Student.DeptNo">
+	<select class="form-select-sm" asp-items="deptsSL" asp-for="@Model.Student.DeptNo">
 	</select><br /><br />
 
 	<button asp-controller="Student" asp-action="edit" class="btn btn-info">Edit</button>
