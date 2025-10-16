@@ -1,6 +1,7 @@
 using System.Diagnostics;
-using Demo.Models;
+using ModelsLayer.Models;
 using Microsoft.AspNetCore.Mvc;
+using Demo.ViewModels;
 
 namespace Demo.Controllers
 {

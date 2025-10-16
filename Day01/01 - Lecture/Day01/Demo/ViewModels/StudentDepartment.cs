@@ -1,4 +1,4 @@
-﻿using Demo.Models;
+﻿using ModelsLayer.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Demo.ViewModels

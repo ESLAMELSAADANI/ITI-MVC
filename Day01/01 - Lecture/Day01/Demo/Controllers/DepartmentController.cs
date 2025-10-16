@@ -1,10 +1,10 @@
 ﻿using Demo.DAL;
-using Demo.Models;
+using ModelsLayer.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Demo.Controllers
 {
-    [Route("hamada/{action=index}/{id:int:max(500)?}")]
+    //[Route("hamada/{action=index}/{id:int:max(500)?}")]
     public class DepartmentController : Controller
     {
         ITIDbContext dbContext = new ITIDbContext();

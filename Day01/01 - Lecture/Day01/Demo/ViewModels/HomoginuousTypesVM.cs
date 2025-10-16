@@ -1,4 +1,4 @@
-﻿using Demo.Models;
+﻿using ModelsLayer.Models;
 
 namespace Demo.ViewModels
 {

@@ -1,6 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using ModelsLayer.Models;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Demo.Models
+namespace ModelsLayer.Models
 {
     public class Student
     {

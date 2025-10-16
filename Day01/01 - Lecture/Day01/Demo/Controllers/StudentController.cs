@@ -1,5 +1,5 @@
 ﻿using Demo.DAL;
-using Demo.Models;
+using ModelsLayer.Models;
 using Demo.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;

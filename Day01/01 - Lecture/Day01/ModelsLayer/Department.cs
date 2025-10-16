@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Demo.Models
+namespace ModelsLayer.Models
 {
     [PrimaryKey("DeptId")]
     public class Department
