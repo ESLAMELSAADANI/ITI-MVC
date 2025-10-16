@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Demo.Controllers
 {
+    [Route("hamada/{action=index}/{id:int:max(500)?}")]
     public class DepartmentController : Controller
     {
         ITIDbContext dbContext = new ITIDbContext();
+        //[Route("hamada")]
         public IActionResult Index()
         {
             var model = dbContext.Department.ToList();
@@ -51,6 +53,7 @@ namespace Demo.Controllers
         [HttpGet]
         public IActionResult Edit(int? id)
         {
+            
             if (id == null)//if user not enter value for id => /department/edit
             {
                 return BadRequest();

@@ -24,7 +24,9 @@ namespace Demo
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=student}/{action=index}/{id:int?}");//Start With ControllerName
+                //pattern: "{action=index}/{controller=student}/{id:int?}");//Start With ActionName
+                //pattern: "ITI/{controller=student}/{action=index}/{id:int?}");//Start URL with static value
 
             app.Run();
         }
