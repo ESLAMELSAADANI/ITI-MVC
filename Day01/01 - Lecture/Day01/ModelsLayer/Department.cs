@@ -10,9 +10,11 @@ namespace ModelsLayer.Models
         public string DeptName { get; set; }
         public int Capacity { get; set; }
         public List<Student> Students { get; set; } = new List<Student>();
+        public bool IsActive { get; set; } = true;
         public override string ToString()
         {
             return $"DeptId= {DeptId} - DeptName= {DeptName} - Capacity= {Capacity}";
         }
+
     }
 }

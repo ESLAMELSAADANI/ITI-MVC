@@ -1,17 +1,21 @@
 ﻿using Demo.DAL;
 using ModelsLayer.Models;
 using Microsoft.AspNetCore.Mvc;
+using Demo.Repos;
 
 namespace Demo.Controllers
 {
     //[Route("hamada/{action=index}/{id:int:max(500)?}")]
     public class DepartmentController : Controller
     {
-        ITIDbContext dbContext = new ITIDbContext();
+        //ITIDbContext dbContext = new ITIDbContext();
+        IEntityRepo<Department> departmentRepo = new DepartmentRepo();
         //[Route("hamada")]
         public IActionResult Index()
         {
-            var model = dbContext.Department.ToList();
+            //var model = dbContext.Department.ToList();
+            var model = departmentRepo.GetAll();
+            departmentRepo.Dispose();
             return View(model);
         }
         //Show The Form Of Add New Department
@@ -26,8 +30,13 @@ namespace Demo.Controllers
         {
             try
             {
-                dbContext.Department.Add(dept);
-                dbContext.SaveChanges();
+                //dbContext.Department.Add(dept);
+                //dbContext.SaveChanges();
+                //return RedirectToAction("index");
+
+                departmentRepo.Insert(dept);
+                departmentRepo.Save();
+                departmentRepo.Dispose();
                 return RedirectToAction("index");
             }
             catch (Exception ex)
@@ -44,23 +53,33 @@ namespace Demo.Controllers
             {
                 return BadRequest();
             }
-            var dept = dbContext.Department.SingleOrDefault(d => d.DeptId == id);
+            //var dept = dbContext.Department.SingleOrDefault(d => d.DeptId == id);
+            var dept = departmentRepo.Get(id.Value);
             if (dept == null)//if user enter id not match any dept in DB => /department/details/88888
+            {
+                departmentRepo.Dispose();
                 return NotFound();
+            }
+            departmentRepo.Dispose();
             return View(dept);
         }
 
         [HttpGet]
         public IActionResult Edit(int? id)
         {
-            
+
             if (id == null)//if user not enter value for id => /department/edit
             {
                 return BadRequest();
             }
-            var dept = dbContext.Department.SingleOrDefault(d => d.DeptId == id);
+            //var dept = dbContext.Department.SingleOrDefault(d => d.DeptId == id);
+            var dept = departmentRepo.Get(id.Value);
             if (dept == null)//if user enter id not match any dept in DB => /department/edit/88888
+            {
+                departmentRepo.Dispose();
                 return NotFound();
+            }
+            departmentRepo.Dispose();
             return View(dept);
         }
         [HttpPost]
@@ -68,8 +87,14 @@ namespace Demo.Controllers
         {
             try
             {
-                dbContext.Department.Update(dept);
-                dbContext.SaveChanges();
+                //dbContext.Department.Update(dept);
+                //dbContext.SaveChanges();
+                //return RedirectToAction("index");
+
+
+                departmentRepo.Update(dept);
+                departmentRepo.Save();
+                departmentRepo.Dispose();
                 return RedirectToAction("index");
             }
             catch (Exception ex)
@@ -78,14 +103,22 @@ namespace Demo.Controllers
                 return View("exception", ex);
             }
         }
-        
+
         public IActionResult Delete(int? id)
         {
+            if (id == null)
+                return BadRequest();
             try
             {
-                var dept = dbContext.Department.SingleOrDefault(d => d.DeptId == id);
-                dbContext.Department.Remove(dept);
-                dbContext.SaveChanges();
+                //var dept = dbContext.Department.SingleOrDefault(d => d.DeptId == id);
+                //dbContext.Department.Remove(dept);
+                //dbContext.SaveChanges();
+                //return RedirectToAction("index");
+
+
+                departmentRepo.Delete(id.Value);
+                departmentRepo.Save();
+                departmentRepo.Dispose();
                 return RedirectToAction("index");
             }
             catch (Exception ex)
@@ -99,9 +132,14 @@ namespace Demo.Controllers
         {
             try
             {
-                //var dept = dbContext.Department.SingleOrDefault(d => d.DeptId == id);
-                dbContext.Department.Remove(dept);
-                dbContext.SaveChanges();
+                ////var dept = dbContext.Department.SingleOrDefault(d => d.DeptId == id);
+                //dbContext.Department.Remove(dept);
+                //dbContext.SaveChanges();
+                //return RedirectToAction("index");
+
+                departmentRepo.Delete(dept.DeptId);
+                departmentRepo.Save();
+                departmentRepo.Dispose();
                 return RedirectToAction("index");
             }
             catch (Exception ex)
