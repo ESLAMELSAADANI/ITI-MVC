@@ -4,8 +4,12 @@ using ModelsLayer.Models;
 
 namespace Demo.Repos
 {
-    
-    public class DepartmentRepo : IEntityRepo<Department>
+    public interface IIdExist
+    {
+        bool IsIdExist(int id);
+    }
+
+    public class DepartmentRepo : IEntityRepo<Department>, IIdExist
     {
         ITIDbContext dbContext = new ITIDbContext();
         public void Delete(int id)
@@ -64,6 +68,11 @@ namespace Demo.Repos
             //dbContext.Add(department);
             dbContext.Department.Add(department);
             return department;
+        }
+
+        public bool IsIdExist(int id)
+        {
+            return dbContext.Department.Any(d => d.DeptId == id);
         }
 
         public int Save()

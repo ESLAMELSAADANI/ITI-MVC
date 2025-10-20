@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures.Buffers;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using Demo.Repos;
 
 namespace Demo.Controllers
@@ -14,6 +15,7 @@ namespace Demo.Controllers
         //ITIDbContext dbContext = new ITIDbContext();
         IEntityRepo<Student> studentRepo = new StudentRepo();
         IEntityRepo<Department> departmentRepo = new DepartmentRepo();
+        IEmailExist studentEmailExist = new StudentRepo();
         public IActionResult Index()
         {
             //var students = dbContext.Students.Include(s => s.Department).ToList();//Load Related Data Through Navigational Property(EagerLoading) => Load Data Of Department also To Use It Inside View
@@ -49,20 +51,33 @@ namespace Demo.Controllers
             return View(studentDepartment);
         }
         [HttpPost]
-        public IActionResult Add(Student student)
+        public IActionResult Add(StudentDepartment studentDepartment)
         {
             //dbContext.Students.Add(student);
             //dbContext.SaveChanges();
             //return RedirectToAction("index");
 
             //==== Repository Design Pattern =========
+            //==== Validation On student properties values ====
+            if (ModelState.IsValid)
+            {
+                var hasher = new PasswordHasher<Student>();
 
-            studentRepo.Insert(student);
-            //studentRepo.Update(student);
-            //studentRepo.Delete(student.Id);
-            studentRepo.Save();
-            studentRepo.Dispose();
-            return RedirectToAction("index");
+                // Hash the password before saving it
+                studentDepartment.Student.Password = hasher.HashPassword(studentDepartment.Student, studentDepartment.Student.Password);
+
+                studentRepo.Insert(studentDepartment.Student);
+                //studentRepo.Update(student);
+                //studentRepo.Delete(student.Id);
+                studentRepo.Save();
+                studentRepo.Dispose();
+                return RedirectToAction("index");
+            }
+
+            studentDepartment.Departments = departmentRepo.GetAll();
+            departmentRepo.Dispose();
+            return View(studentDepartment);
+
         }
         [HttpGet]
         public IActionResult Edit(int? id)
@@ -93,6 +108,10 @@ namespace Demo.Controllers
             //return RedirectToAction("index");
 
             //===== Repository Design Pattern =======
+
+            var hasher = new PasswordHasher<Student>();
+            // Hash the password before saving it
+            student.Password = hasher.HashPassword(student, student.Password);
 
             studentRepo.Update(student);
             studentRepo.Save();
@@ -134,6 +153,14 @@ namespace Demo.Controllers
             studentRepo.Save();
             studentRepo.Dispose();
             return RedirectToAction("index");
+        }
+        public IActionResult EmailExist([FromQuery(Name = "Student.Email")] string Student_Email)
+        {
+            bool isExist = studentEmailExist.IsEmailExist(Student_Email);
+            if (isExist == true)
+                return Json(false);
+            else
+                return Json(true);
         }
     }
 }

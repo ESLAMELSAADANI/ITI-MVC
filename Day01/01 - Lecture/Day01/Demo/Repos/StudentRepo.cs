@@ -4,7 +4,11 @@ using ModelsLayer.Models;
 
 namespace Demo.Repos
 {
-    public class StudentRepo : IEntityRepo<Student>
+    public interface IEmailExist
+    {
+        bool IsEmailExist(string email);
+    }
+    public class StudentRepo : IEntityRepo<Student>,IEmailExist
     {
         ITIDbContext dbContext = new ITIDbContext();
         public void Delete(int id)
@@ -39,6 +43,11 @@ namespace Demo.Repos
         {
             dbContext.Students.Add(student);//Add In App Memory
             return student;
+        }
+
+        public bool IsEmailExist(string email)
+        {
+            return dbContext.Students.Any(s => s.Email == email);
         }
 
         public int Save()

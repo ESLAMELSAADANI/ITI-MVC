@@ -17,14 +17,16 @@
 <form asp-controller="department" asp-action="create">
 	<!-- Automatically after click on Add button, will send request to server same as current URL request but with (Post) method => Post http:localhost:3040/department/create -->
 	<label asp-for="DeptId" class="col-form-label">Id</label><br />
-	<input class="form-control-sm" asp-for="@Model.DeptId" placeholder="Enter DeptId" /><br /><br />
+	<input class="form-control-sm" asp-for="@Model.DeptId" placeholder="Enter DeptId" /><span class="text-danger" asp-validation-for="DeptId"></span><br /><br />
 
 	<label asp-for="DeptName" class="col-form-label">Name</label><br />
-	<input class="form-control-sm" asp-for="@Model.DeptName" placeholder="Enter DeptName" /><br /><br />
+	<input class="form-control-sm" asp-for="@Model.DeptName" placeholder="Enter DeptName" /><span class="text-danger" asp-validation-for="DeptName"></span><br /><br />
 
 	<label asp-for="Capacity" class="col-form-label">Capacity</label><br />
-	<input class="form-control-sm" asp-for="@Model.Capacity" placeholder="Enter Capacity" /><br /><br />
+	<input class="form-control-sm" asp-for="@Model.Capacity" placeholder="Enter Capacity" /><span class="text-danger" asp-validation-for="Capacity"></span><br /><br />
 
 	<input type="submit" value="Add" class="btn btn-success" />
 </form>
-
+@section scripts {
+	<partial name="_ValidationScriptsPartial" />
+}

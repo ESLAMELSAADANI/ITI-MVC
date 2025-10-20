@@ -6,6 +6,6 @@ namespace Demo.ViewModels
     public class StudentDepartment
     {
         public Student Student { get; set; }
-        public List<Department> Departments { get; set; }
+        public List<Department> Departments { get; set; } = new();
     }
 }

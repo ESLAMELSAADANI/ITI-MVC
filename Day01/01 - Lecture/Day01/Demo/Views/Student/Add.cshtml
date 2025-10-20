@@ -7,19 +7,38 @@
 <h1>Add New Student</h1>
 <form method="post">
 	<label asp-for="@Model.Student.Name" class="col-form-label">Name</label><br />
-	<input asp-for="@Model.Student.Name" placeholder="Enter The Name" class="form-control-sm" /><br /><br />
+	<input asp-for="@Model.Student.Name" placeholder="Enter The Name" class="form-control-sm" /><span class="text-danger" asp-validation-for="Student.Name"> </span><br /><br />
 
 	<label asp-for="@Model.Student.Age" class="col-form-label">Age</label><br />
-	<input asp-for="@Model.Student.Age" placeholder="Enter The Age" class="form-control-sm" /><br /><br />
+	<input asp-for="@Model.Student.Age" placeholder="Enter The Age" class="form-control-sm" /><span class="text-danger" asp-validation-for="Student.Age"> </span><br /><br />
+
+	<label asp-for="@Model.Student.Email" class="col-form-label">Email</label><br />
+	<input asp-for="@Model.Student.Email" placeholder="example@email.com" class="form-control-sm" /><span class="text-danger" asp-validation-for="Student.Email"> </span><br /><br />
 
 	<label asp-for="@Model.Student.DeptNo" class="col-form-label">DeptName</label><br />
 	<select class="form-select-sm" asp-items="@deptsSL" asp-for="@Model.Student.DeptNo">
+
 		@* @foreach (Department dept in Model.Departments)
 		{
 			<option value="@dept.DeptId">@dept.DeptName</option>
 		} *@
-	</select><br /><br />
+		<option value="">-- Select Department --</option>
+	</select><span class="text-danger" asp-validation-for="Student.DeptNo"> </span><br /><br />
+
+	<label asp-for="@Model.Student.Password" class="col-form-label">Password</label><br />
+	<input type="password" asp-for="@Model.Student.Password" placeholder="*******" class="form-control-sm" /><span class="text-danger" asp-validation-for="Student.Password"> </span><br /><br />
+
+	<label asp-for="@Model.Student.ConfirmPassword" class="col-form-label">Confirm Password</label><br />
+	<input type="password" asp-for="@Model.Student.ConfirmPassword" placeholder="*******" class="form-control-sm" /><span class="text-danger" asp-validation-for="Student.ConfirmPassword"> </span><br /><br />
 
 	<input type="submit" asp-action="add" value="Add" class="btn btn-success" />
-
 </form>
+@* This enables client-side (live) validation — so the user sees the message immediately without refreshing the page [Request The Server ]. *@
+@section Scripts {
+	@* option one *@
+	@* <partial name="_ValidationScriptsPartial" /> *@
+
+	@* option two -> use the scripts that make the clientSide validation => those scripts are in file _ValidationScriptsPartial so can use option one*@
+	<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+	<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}

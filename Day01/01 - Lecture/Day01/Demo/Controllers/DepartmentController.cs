@@ -10,6 +10,7 @@ namespace Demo.Controllers
     {
         //ITIDbContext dbContext = new ITIDbContext();
         IEntityRepo<Department> departmentRepo = new DepartmentRepo();
+        IIdExist departmentExist = new DepartmentRepo();
         //[Route("hamada")]
         public IActionResult Index()
         {
@@ -147,6 +148,12 @@ namespace Demo.Controllers
 
                 return View("exception", ex);
             }
+        }
+
+        public IActionResult IdExist(int DeptId)
+       {
+            bool exist = departmentExist.IsIdExist(DeptId);
+            return Json(!exist);
         }
     }
 }
