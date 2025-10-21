@@ -13,14 +13,28 @@ namespace Demo.Controllers
     public class StudentController : Controller
     {
         //ITIDbContext dbContext = new ITIDbContext();
-        IEntityRepo<Student> studentRepo = new StudentRepo();
-        IEntityRepo<Department> departmentRepo = new DepartmentRepo();
-        IEmailExist studentEmailExist = new StudentRepo();
+        //===== Repository Design Pattern ========
+        //IEntityRepo<Student> studentRepo = new StudentRepo();
+        //IEntityRepo<Department> departmentRepo = new DepartmentRepo();
+        //IEmailExist studentEmailExist = new StudentRepo();
+
+        //===== Dependency Injection ========
+        IEntityRepo<Student> studentRepo;
+        IEntityRepo<Department> departmentRepo;
+        IEmailExist studentEmailExist;
+
+        public StudentController(IEntityRepo<Student> _studentRepo, IEntityRepo<Department> _departmentRepo, IEmailExist _studentEmailExist)
+        {
+            studentRepo = _studentRepo;
+            departmentRepo = _departmentRepo;
+            studentEmailExist = _studentEmailExist;
+        }
+
         public IActionResult Index()
         {
             //var students = dbContext.Students.Include(s => s.Department).ToList();//Load Related Data Through Navigational Property(EagerLoading) => Load Data Of Department also To Use It Inside View
             var students = studentRepo.GetAll();
-            studentRepo.Dispose();
+            //studentRepo.Dispose();
             return View(students);
         }
         public IActionResult Details(int? id)
@@ -30,10 +44,10 @@ namespace Demo.Controllers
             var student = studentRepo.Details(id.Value);
             if (student == null)
             {
-                studentRepo.Dispose();
+                //studentRepo.Dispose();
                 return NotFound();
             }
-            studentRepo.Dispose();
+            //studentRepo.Dispose();
             return View(student);
         }
         [HttpGet]
@@ -47,7 +61,7 @@ namespace Demo.Controllers
                 Student = new Student(),
                 Departments = departmentRepo.GetAll()
             };
-            departmentRepo.Dispose();
+            //departmentRepo.Dispose();
             return View(studentDepartment);
         }
         [HttpPost]
@@ -70,12 +84,12 @@ namespace Demo.Controllers
                 //studentRepo.Update(student);
                 //studentRepo.Delete(student.Id);
                 studentRepo.Save();
-                studentRepo.Dispose();
+                //studentRepo.Dispose();
                 return RedirectToAction("index");
             }
 
             studentDepartment.Departments = departmentRepo.GetAll();
-            departmentRepo.Dispose();
+            //departmentRepo.Dispose();
             return View(studentDepartment);
 
         }
@@ -88,7 +102,7 @@ namespace Demo.Controllers
             var student = studentRepo.Get(id.Value);
             if (student == null)
             {
-                studentRepo.Dispose();
+                //studentRepo.Dispose();
                 return NotFound();
             }
             var depts = departmentRepo.GetAll();
@@ -97,7 +111,7 @@ namespace Demo.Controllers
                 Student = student,
                 Departments = departmentRepo.GetAll()
             };
-            departmentRepo.Dispose();
+            //departmentRepo.Dispose();
             return View(studentDepartment);
         }
         [HttpPost]
@@ -115,7 +129,7 @@ namespace Demo.Controllers
 
             studentRepo.Update(student);
             studentRepo.Save();
-            studentRepo.Dispose();
+            //studentRepo.Dispose();
             return RedirectToAction("index");
         }
         [HttpGet]
@@ -127,7 +141,7 @@ namespace Demo.Controllers
             var student = studentRepo.Get(id.Value);
             if (student == null)
             {
-                studentRepo.Dispose();
+                //studentRepo.Dispose();
                 return NotFound();
             }
             //dbContext.Students.Remove(student);
@@ -138,7 +152,7 @@ namespace Demo.Controllers
 
             studentRepo.Delete(id.Value);
             studentRepo.Save();
-            studentRepo.Dispose();
+            //studentRepo.Dispose();
             return RedirectToAction("index");
         }
         [HttpPost]
@@ -151,7 +165,7 @@ namespace Demo.Controllers
             //====== Repository Pattern ========
             studentRepo.Delete(stdDept.Student.Id);
             studentRepo.Save();
-            studentRepo.Dispose();
+            //studentRepo.Dispose();
             return RedirectToAction("index");
         }
         public IActionResult EmailExist([FromQuery(Name = "Student.Email")] string Student_Email)

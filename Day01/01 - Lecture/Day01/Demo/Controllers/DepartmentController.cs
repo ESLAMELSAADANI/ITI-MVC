@@ -9,14 +9,27 @@ namespace Demo.Controllers
     public class DepartmentController : Controller
     {
         //ITIDbContext dbContext = new ITIDbContext();
-        IEntityRepo<Department> departmentRepo = new DepartmentRepo();
-        IIdExist departmentExist = new DepartmentRepo();
+        //===== Repository Design Pattern =======
+        //IEntityRepo<Department> departmentRepo = new DepartmentRepo();
+        //IIdExist departmentExist = new DepartmentRepo();
+
+        //===== Dependency Injection ======
+        IEntityRepo<Department> departmentRepo;
+        IIdExist departmentExist;
+
+        public DepartmentController(IEntityRepo<Department> _departmentRepo, IIdExist _departmentExist)
+        {
+            departmentRepo = _departmentRepo;
+            departmentExist = _departmentExist;
+            Console.WriteLine($"From CTOR() => {departmentRepo.GetHashCode()}");
+        }
+
         //[Route("hamada")]
-        public IActionResult Index()
+        public IActionResult Index(/*[FromServices]IEntityRepo<Department> _departmentRepo*/)
         {
             //var model = dbContext.Department.ToList();
             var model = departmentRepo.GetAll();
-            departmentRepo.Dispose();
+            //departmentRepo.Dispose();
             return View(model);
         }
         //Show The Form Of Add New Department
@@ -37,7 +50,7 @@ namespace Demo.Controllers
 
                 departmentRepo.Insert(dept);
                 departmentRepo.Save();
-                departmentRepo.Dispose();
+                //departmentRepo.Dispose();
                 return RedirectToAction("index");
             }
             catch (Exception ex)
@@ -58,17 +71,16 @@ namespace Demo.Controllers
             var dept = departmentRepo.Get(id.Value);
             if (dept == null)//if user enter id not match any dept in DB => /department/details/88888
             {
-                departmentRepo.Dispose();
+                //departmentRepo.Dispose();
                 return NotFound();
             }
-            departmentRepo.Dispose();
+            //departmentRepo.Dispose();
             return View(dept);
         }
 
         [HttpGet]
         public IActionResult Edit(int? id)
         {
-
             if (id == null)//if user not enter value for id => /department/edit
             {
                 return BadRequest();
@@ -77,10 +89,10 @@ namespace Demo.Controllers
             var dept = departmentRepo.Get(id.Value);
             if (dept == null)//if user enter id not match any dept in DB => /department/edit/88888
             {
-                departmentRepo.Dispose();
+                //departmentRepo.Dispose();
                 return NotFound();
             }
-            departmentRepo.Dispose();
+            //departmentRepo.Dispose();
             return View(dept);
         }
         [HttpPost]
@@ -95,7 +107,7 @@ namespace Demo.Controllers
 
                 departmentRepo.Update(dept);
                 departmentRepo.Save();
-                departmentRepo.Dispose();
+                //departmentRepo.Dispose();
                 return RedirectToAction("index");
             }
             catch (Exception ex)
@@ -119,7 +131,7 @@ namespace Demo.Controllers
 
                 departmentRepo.Delete(id.Value);
                 departmentRepo.Save();
-                departmentRepo.Dispose();
+                //departmentRepo.Dispose();
                 return RedirectToAction("index");
             }
             catch (Exception ex)
@@ -140,7 +152,7 @@ namespace Demo.Controllers
 
                 departmentRepo.Delete(dept.DeptId);
                 departmentRepo.Save();
-                departmentRepo.Dispose();
+                //departmentRepo.Dispose();
                 return RedirectToAction("index");
             }
             catch (Exception ex)
@@ -151,7 +163,7 @@ namespace Demo.Controllers
         }
 
         public IActionResult IdExist(int DeptId)
-       {
+        {
             bool exist = departmentExist.IsIdExist(DeptId);
             return Json(!exist);
         }

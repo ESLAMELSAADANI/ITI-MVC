@@ -11,7 +11,16 @@ namespace Demo.Repos
 
     public class DepartmentRepo : IEntityRepo<Department>, IIdExist
     {
-        ITIDbContext dbContext = new ITIDbContext();
+        //ITIDbContext dbContext = new ITIDbContext();
+
+        //====== Dependency Injection =======
+        ITIDbContext dbContext;
+
+        public DepartmentRepo(ITIDbContext _dbContext)//Constructor Injection [DIC Will Inject The Object Here]
+        {
+            dbContext = _dbContext;
+        }
+
         public void Delete(int id)
         {
             var dept = dbContext.Department.Include(d => d.Students).SingleOrDefault(d => d.DeptId == id);
@@ -47,10 +56,10 @@ namespace Demo.Repos
             return dept;
         }
 
-        public void Dispose()
-        {
-            dbContext.Dispose();
-        }
+        //public void Dispose()
+        //{
+        //    dbContext.Dispose();
+        //}
 
         public Department Get(int id)
         {

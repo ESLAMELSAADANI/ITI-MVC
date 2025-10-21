@@ -5,13 +5,23 @@ namespace Demo.DAL
 {
     public class ITIDbContext : DbContext
     {
+        //protected ITIDbContext()
+        //{
+        //}
+
+        public ITIDbContext(DbContextOptions options) : base(options)
+        {
+            
+        }
+
+
         public DbSet<Student> Students { get; set; }
         public DbSet<Department> Department { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=ITIMVC;Integrated Security=True;Trust Server Certificate=True");
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=ITIMVC;Integrated Security=True;Trust Server Certificate=True");
+        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

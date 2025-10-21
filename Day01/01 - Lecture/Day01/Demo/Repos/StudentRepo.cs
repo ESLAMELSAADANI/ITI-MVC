@@ -10,7 +10,16 @@ namespace Demo.Repos
     }
     public class StudentRepo : IEntityRepo<Student>,IEmailExist
     {
-        ITIDbContext dbContext = new ITIDbContext();
+
+        //ITIDbContext dbContext = new ITIDbContext();
+
+        //====== Dependency Injection =======
+        ITIDbContext dbContext;
+        public StudentRepo(ITIDbContext _dbContext)////Constructor Injection [DIC Will Inject The Object Here]
+        {
+            dbContext = _dbContext;
+        }
+
         public void Delete(int id)
         {
             //dbContext.Students.Where(s => s.Id == id).ExecuteDelete();
@@ -24,10 +33,11 @@ namespace Demo.Repos
             return student;
         }
 
-        public void Dispose()
-        {
-            dbContext.Dispose();
-        }
+        //Not need to use it, bcz dependency injection automatically dispose object created after lifetime of it end
+        //public void Dispose()
+        //{
+        //    dbContext.Dispose();
+        //}
 
         public Student Get(int id)
         {
