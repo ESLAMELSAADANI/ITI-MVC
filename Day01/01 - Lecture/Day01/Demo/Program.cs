@@ -17,7 +17,7 @@ namespace Demo
             builder.Services.AddScoped<IEntityRepo<Student>, StudentRepo>();
             builder.Services.AddScoped<IEmailExist, StudentRepo>();
             builder.Services.AddScoped<IIdExist, DepartmentRepo>();
-           
+
             //===== Use Default Constructor Of ITIDbContext When Make object from it and use OnConfiguring() of it which define the connectionString =======
             //builder.Services.AddScoped<ITIDbContext, ITIDbContext>();
             //builder.Services.AddScoped<ITIDbContext>();//Also Can Write This if the name of key same as value.
@@ -39,16 +39,65 @@ namespace Demo
             app.UseStaticFiles();
 
             app.UseRouting();
-
+             
             app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=student}/{action=index}/{id:int?}");//Start With ControllerName
-                //pattern: "{action=index}/{controller=student}/{id:int?}");//Start With ActionName
-                //pattern: "ITI/{controller=student}/{action=index}/{id:int?}");//Start URL with static value
-
+                                                                          //pattern: "{action=index}/{controller=student}/{id:int?}");//Start With ActionName
+                                                                          //pattern: "ITI/{controller=student}/{action=index}/{id:int?}");//Start URL with static value
             app.Run();
+
+            //=======================================================================
+
+            //====== Make The MiddleWare Manually using Run() - Use() - Map() =====
+            //app.Run() is short circuite => can't call the next middleware inside body of it.
+            //app.Run(async (context,next) =>
+            //{
+            //    await context.Response.WriteAsync("Middleware 1 :: Before next()");
+            //});
+
+
+
+            //app.Use() - can act as short circuited or not bcz inside it you can call the next middleware 
+            app.Use(async (context, next) =>
+            {
+                await context.Response.WriteAsync("Middleware 1 :: Before next()\n");
+                await next();
+                await context.Response.WriteAsync("Middleware 1 :: After next()\n");
+            });
+            app.Use(async (context, next) =>
+            {
+                await context.Response.WriteAsync("Middleware 2 :: Before next()\n");
+                await next();
+                await context.Response.WriteAsync("Middleware 2 :: After next()\n");
+            });
+            app.Use(async (context, next) =>
+            {
+                await context.Response.WriteAsync("Middleware 3 :: Before next()\n");
+                await next();
+                await context.Response.WriteAsync("Middleware 3 :: After next()\n");
+            });
+
+            app.Run(async context =>
+            {
+                await context.Response.WriteAsync("Hello From The Final Middleware!\n");
+            });
+            app.Run();
+
+            //For Any Request The Response Will Be Like This:
+
+            //Middleware 1 :: Before next()
+            //Middleware 2 :: Before next()
+            //Middleware 3 :: Before next()
+            //Hello From The Final Middleware!
+            //Middleware 3 :: After next()
+            //Middleware 2 :: After next()
+            //Middleware 1 :: After next()
+
+            //============================================================================
+
         }
     }
 }

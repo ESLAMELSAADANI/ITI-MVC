@@ -32,6 +32,7 @@ namespace Demo.Controllers
 
         public IActionResult Index()
         {
+            //int x = int.Parse("ssss");//Simulate there are exception to test Development and production Environment.
             //var students = dbContext.Students.Include(s => s.Department).ToList();//Load Related Data Through Navigational Property(EagerLoading) => Load Data Of Department also To Use It Inside View
             var students = studentRepo.GetAll();
             //studentRepo.Dispose();
