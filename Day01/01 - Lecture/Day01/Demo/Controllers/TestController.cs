@@ -49,8 +49,6 @@ namespace Demo.Controllers
         {
             return x + y;
         }
-          
-
         //Domain:Port/Test/Details
         public ViewResult Details()
         {

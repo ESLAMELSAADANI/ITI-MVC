@@ -29,7 +29,7 @@ namespace Demo.Controllers
             departmentRepo = _departmentRepo;
             studentEmailExist = _studentEmailExist;
         }
-
+        
         public IActionResult Index()
         {
             //int x = int.Parse("ssss");//Simulate there are exception to test Development and production Environment.

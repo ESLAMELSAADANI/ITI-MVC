@@ -9,7 +9,6 @@ namespace Demo.ViewModels
         public Course Course { get; set; }
         public List<StudentDegreeVM> StudentCourseDegrees { get; set; } = new List<StudentDegreeVM>();
         public List<StudentDegreeVM> OtherStudents { get; set; } = new List<StudentDegreeVM>();
-
         public List<int> SelectedStudentIds { get; set; } = new();
     }
 }

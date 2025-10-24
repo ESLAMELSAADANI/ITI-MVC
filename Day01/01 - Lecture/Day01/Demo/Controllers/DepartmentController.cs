@@ -30,7 +30,6 @@ namespace Demo.Controllers
             studentCourseRepo = _studentCourseRepo;
             StudentCourseRepoGet = _studentCourseRepoGet;
         }
-
         //[Route("hamada")]
         public IActionResult Index(/*[FromServices]IEntityRepo<Department> _departmentRepo*/)
         {
@@ -66,7 +65,6 @@ namespace Demo.Controllers
                 return View("exception", ex);
             }
         }
-
         // department/details/500   =>  500 will binded to the passed parameter id [Route System Behavior]
         public IActionResult Details(int? id)
         {
@@ -84,7 +82,6 @@ namespace Demo.Controllers
             //departmentRepo.Dispose();
             return View(dept);
         }
-
         [HttpGet]
         public IActionResult Edit(int? id)
         {
@@ -123,7 +120,6 @@ namespace Demo.Controllers
                 return View("exception", ex);
             }
         }
-
         //For View Department Courses Details and can delete course
         public IActionResult DepartmentCourses(int? id)
         {
@@ -252,13 +248,11 @@ namespace Demo.Controllers
                 return View("exception", ex);
             }
         }
-
         public IActionResult IdExist(int DeptId)
         {
             bool exist = departmentExist.IsIdExist(DeptId);
             return Json(!exist);
         }
-
         public IActionResult ViewCourseStudents(int crsId, int deptID)
         {
             var department = departmentRepo.Get(deptID);

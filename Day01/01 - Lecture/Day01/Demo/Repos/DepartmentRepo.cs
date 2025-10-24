@@ -20,7 +20,7 @@ namespace Demo.Repos
         {
             dbContext = _dbContext;
         }
-
+        
         public void Delete(int id)
         {
             var dept = dbContext.Department.Include(d => d.Students).SingleOrDefault(d => d.DeptId == id);
@@ -49,28 +49,23 @@ namespace Demo.Repos
             }
             //dbContext.Remove(dept);
         }
-
         public Department Details(int id)
         {
             var dept = dbContext.Department.SingleOrDefault(d => d.DeptId == id);
             return dept;
         }
-
         //public void Dispose()
         //{
         //    dbContext.Dispose();
         //}
-
         public Department Get(int id)
         {
             return dbContext.Department.Include(d => d.Courses).Include(d => d.Students).ThenInclude(d => d.StudentCourses).SingleOrDefault(d => d.DeptId == id);
         }
-
         public List<Department> GetAll()
         {
             return dbContext.Department.Where(d => d.IsActive == true).ToList();//Just Returned Active Depts Which Contain Students.
         }
-
         public Department Insert(Department department)
         {
 
@@ -78,17 +73,14 @@ namespace Demo.Repos
             dbContext.Department.Add(department);
             return department;
         }
-
         public bool IsIdExist(int id)
         {
             return dbContext.Department.Any(d => d.DeptId == id);
         }
-
         public int Save()
         {
             return dbContext.SaveChanges();
         }
-
         public Department Update(Department department)
         {
             dbContext.Department.Update(department);
