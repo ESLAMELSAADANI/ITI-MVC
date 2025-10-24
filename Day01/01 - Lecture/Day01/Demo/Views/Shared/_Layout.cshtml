@@ -8,7 +8,7 @@
 	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 	<link rel="stylesheet" href="~/Demo.styles.css" asp-append-version="true" />
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
 	<header>
 		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
 			<div class="container-fluid">
@@ -35,7 +35,6 @@
 							<ul class="dropdown-menu dropdown-menu-white">
 								<li><a class="dropdown-item" asp-controller="department" asp-action="index">All Depts</a></li>
 								<li><a class="dropdown-item" asp-controller="department" asp-action="create">Add Department</a></li>
-								<li><a class="dropdown-item" href="#">Something else here</a></li>
 							</ul>
 						</li>
 						<li class="nav-item dropdown">
@@ -45,7 +44,15 @@
 							<ul class="dropdown-menu dropdown-menu-white">
 								<li><a class="dropdown-item" asp-controller="Student" asp-action="index">All Students</a></li>
 								<li><a class="dropdown-item" asp-controller="Student" asp-action="add">Add Student</a></li>
-								<li><a class="dropdown-item" href="#">Something else here</a></li>
+							</ul>
+						</li>
+						<li class="nav-item dropdown">
+							<button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+								Course
+							</button>
+							<ul class="dropdown-menu dropdown-menu-white">
+								<li><a class="dropdown-item" asp-controller="Course" asp-action="index">All Courses</a></li>
+								<li><a class="dropdown-item" asp-controller="Course" asp-action="add">Add Course</a></li>
 							</ul>
 						</li>
 					</ul>
@@ -53,21 +60,24 @@
 			</div>
 		</nav>
 	</header>
-	<div class="container">
+
+	<!-- Main content area should grow to fill remaining space -->
+	<div class="container flex-grow-1">
 		<main role="main" class="pb-3">
 			@RenderBody()
 		</main>
 	</div>
 
-	<footer class="border-top footer text-muted">
+	<!-- Footer pushed to bottom when content is short -->
+	<footer class="border-top footer text-muted mt-auto">
 		<div class="container">
 			&copy; 2025 - Demo - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
 		</div>
 	</footer>
+
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>
 	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="~/js/site.js" asp-append-version="true"></script>
 	@await RenderSectionAsync("Scripts", required: false)
-	@* @await RenderSectionAsync("sec1", required: false) *@
 </body>
 </html>

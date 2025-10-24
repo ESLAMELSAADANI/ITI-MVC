@@ -3,7 +3,7 @@
 	ViewData["Title"] = "Edit";
 }
 
-<h1>Edit (@Model.DeptName) Department:</h1>
+<h1>Edit <span class="text-primary">@Model.DeptName</span> Department:</h1>
 <form method="post">
 	<input type="hidden" asp-for="@Model.DeptId" />
 
@@ -13,7 +13,7 @@
 	<label class="col-form-label" asp-for="Capacity">Capacity</label><br />
 	<input class="form-control-sm" asp-for="@Model.Capacity" /><span asp-validation-for="Capacity"></span><br /><br />
 
-	<button asp-action="edit" asp-controller="department" class="btn btn-success">Edit</button>
+	<button asp-action="edit" asp-controller="department" class="btn btn-primary">Edit</button>
 	<button asp-action="delete" asp-controller="department" class="btn btn-danger">Delete</button>
 </form>
 @section scripts {

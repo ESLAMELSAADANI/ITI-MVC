@@ -1,0 +1,94 @@
+﻿@model DepartmentCoursesVM
+@{
+	ViewData["Title"] = "EditDepartmentCourses";
+}
+
+<h1 class="text-center mb-4">Edit Department <span class="text-primary">@Model.Department.DeptName</span> Courses</h1>
+
+<div class="container">
+	<form method="post">
+		<input type="hidden" asp-for="@Model.Department.DeptId" />
+
+		<!-- Two tables side by side -->
+		<div class="row">
+			<!-- Left Table: Courses To Delete -->
+			<div class="col-md-6">
+				<h3 class="text-center mb-3 text-danger">Courses To Delete</h3>
+				<table class="table table-bordered table-hover text-center">
+					<thead class="table-light">
+						<tr>
+							<th>Id</th>
+							<th>Name</th>
+							<th>Duration</th>
+							<th>Select</th>
+						</tr>
+					</thead>
+					<tbody>
+						@if (Model.DepartmentCourses == null || !Model.DepartmentCourses.Any())
+						{
+							<tr>
+								<td colspan="4" class="text-center">No Courses To Delete Found!</td>
+							</tr>
+						}
+						else
+						{
+							@foreach (var course in Model.DepartmentCourses)
+							{
+								<tr>
+									<td>@course.Id</td>
+									<td>@course.CrsName</td>
+									<td>@course.CrsDuration H</td>
+									<td>
+										<input type="checkbox" name="CoursesToDelete" value="@course.Id" />
+									</td>
+								</tr>
+							}
+						}
+					</tbody>
+				</table>
+			</div>
+
+			<!-- Right Table: Courses To Add -->
+			<div class="col-md-6">
+				<h3 class="text-center mb-3 text-success">Courses To Add</h3>
+				<table class="table table-bordered table-hover text-center">
+					<thead class="table-light">
+						<tr>
+							<th>Id</th>
+							<th>Name</th>
+							<th>Duration</th>
+							<th>Select</th>
+						</tr>
+					</thead>
+					<tbody>
+						@if (Model.OtherCourses == null || !Model.OtherCourses.Any())
+						{
+							<tr>
+								<td colspan="4" class="text-center">No Courses To Add Found!</td>
+							</tr>
+						}
+						else
+						{
+							@foreach (var course in Model.OtherCourses)
+							{
+								<tr>
+									<td>@course.Id</td>
+									<td>@course.CrsName</td>
+									<td>@course.CrsDuration H</td>
+									<td>
+										<input type="checkbox" name="CoursesToAdd" value="@course.Id" />
+									</td>
+								</tr>
+							}
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<!-- Centered button after both tables -->
+		<div class="d-flex justify-content-center mt-4">
+			<button type="submit" class="btn btn-primary px-5">Apply Changes</button>
+		</div>
+	</form>
+</div>

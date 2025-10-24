@@ -1,22 +1,25 @@
 ﻿using ModelsLayer.Models;
 using Microsoft.EntityFrameworkCore;
+using ModelsLayer;
 
 namespace Demo.DAL
 {
     public class ITIDbContext : DbContext
     {
+
+        public DbSet<Student> Students { get; set; }
+        public DbSet<Department> Department { get; set; }
+        public DbSet<Course> Courses { get; set; }
+        public DbSet<StudentCourse> StudentCourses { get; set; }
         //protected ITIDbContext()
         //{
         //}
 
         public ITIDbContext(DbContextOptions options) : base(options)
         {
-            
+
         }
 
-
-        public DbSet<Student> Students { get; set; }
-        public DbSet<Department> Department { get; set; }
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
@@ -25,6 +28,16 @@ namespace Demo.DAL
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Course>(c => 
+            {
+                c.HasData(
+                    new Course() { Id = 1, CrsName = "OS", CrsDuration = 120 },
+                    new Course() { Id = 2, CrsName = "Network", CrsDuration = 100 },
+                    new Course() { Id = 3, CrsName = "OOP", CrsDuration = 200 },
+                    new Course() { Id = 4, CrsName = "LINQ", CrsDuration = 150 },
+                    new Course() { Id = 5, CrsName = "DS", CrsDuration = 170 }
+                    );
+            });
             modelBuilder.Entity<Department>(d =>
             {
                 d.HasData(

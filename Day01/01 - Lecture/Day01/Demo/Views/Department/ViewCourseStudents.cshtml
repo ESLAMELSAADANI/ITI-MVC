@@ -1,0 +1,125 @@
+﻿@model DepartmentCourseStudentsVM
+@{
+	ViewData["Title"] = "ViewCourseStudents";
+}
+
+<h1 class="text-center">
+	<span class="text-primary">@Model.Course.CrsName</span> course
+	for the <span class="text-primary">@Model.Department.DeptName</span> Department
+</h1>
+
+<div class="row mt-4">
+	<!-- Enrolled Students -->
+	<div class="col-md-6">
+		<form method="post" asp-action="UpdateDegree">
+			<input type="hidden" asp-for="Department.DeptId" />
+			<input type="hidden" asp-for="Course.Id" />
+
+			<h4 class="text-center text-success">Enrolled Students</h4>
+			<table class="table table-bordered table-hover text-center">
+				<thead>
+					<tr>
+						<th>Id</th>
+						<th>Name</th>
+						<th>Age</th>
+						<th>Degree</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					@if (Model.StudentCourseDegrees.Count == 0)
+					{
+						<tr>
+							<td colspan="5">There are no students enrolled in this course.</td>
+						</tr>
+					}
+					else
+					{
+						@for (int i = 0; i < Model.StudentCourseDegrees.Count; i++)
+						{
+							var degreeVM = Model.StudentCourseDegrees[i];
+							var student = Model.Department.Students.First(s => s.Id == degreeVM.StudentId);
+							<tr>
+								<td>
+									@student.Id
+									<input type="hidden" asp-for="StudentCourseDegrees[@i].StudentId" />
+									<input type="hidden" asp-for="StudentCourseDegrees[@i].CourseId" />
+								</td>
+								<td>@student.Name</td>
+								<td>@student.Age</td>
+								<td>
+									<input asp-for="StudentCourseDegrees[@i].Degree" class="form-control text-center" /><span asp-validation-for="StudentCourseDegrees[@i].Degree" class="text-danger"></span>
+								</td>
+								<td>
+									<a asp-action="deleteStudentCourse" class="btn btn-danger" asp-route-stdId="@Model.StudentCourseDegrees[i].StudentId" asp-route-crsId="@Model.StudentCourseDegrees[i].CourseId" asp-route-deptId="@Model.Department.DeptId">Delete</a>
+								</td>
+							</tr>
+						}
+					}
+				</tbody>
+			</table>
+
+			@if (Model.StudentCourseDegrees.Count > 0)
+			{
+				<!-- ✅ Button directly below the table -->
+				<div class="d-flex justify-content-center mt-3 mb-4">
+					<button type="submit" class="btn btn-primary px-5">Save Changes</button>
+				</div>
+			}
+		</form>
+	</div>
+
+	<!-- Other Students -->
+	<div class="col-md-6">
+		<h4 class="text-center text-secondary">Other Students (Not Enrolled Yet)</h4>
+
+		@if (Model.OtherStudents.Count == 0)
+		{
+			<p class="text-center mt-3 text-muted">All students are already enrolled.</p>
+		}
+		else
+		{
+			<form method="post" asp-action="EnrollSelectedStudents">
+				<input type="hidden" asp-for="Department.DeptId" />
+				<input type="hidden" asp-for="Course.Id" />
+				<table class="table table-bordered table-hover text-center">
+					<thead>
+						<tr>
+							<th>Id</th>
+							<th>Name</th>
+							<th>Age</th>
+							<th>Degree</th>
+							<th>Select</th>
+						</tr>
+					</thead>
+					<tbody>
+						@for (int i = 0; i < Model.OtherStudents.Count; i++)
+						{
+							var student = Model.Department.Students.First(st => st.Id == Model.OtherStudents[i].StudentId);
+							<tr>
+								<td>@student.Id</td>
+								<td>@student.Name</td>
+								<td>@student.Age</td>
+								<td>
+									<input asp-for="OtherStudents[@i].Degree" class="form-control text-center" />
+									<input type="hidden" asp-for="OtherStudents[@i].StudentId" />
+									<span asp-validation-for="OtherStudents[@i].Degree" class="text-danger"></span>
+								</td>
+								<td>
+									<input type="checkbox" name="SelectedStudentIds" value="@student.Id" />
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+
+				<div class="d-flex justify-content-center mt-5">
+					<button type="submit" class="btn btn-success px-5">Enroll Selected Students</button>
+				</div>
+			</form>
+		}
+	</div>
+</div>
+@section scripts {
+	<partial name="_ValidationScriptsPartial" />
+}

@@ -1,25 +1,27 @@
-﻿@model Department
+﻿@model Course
 @{
-	ViewData["Title"] = "Details View";
+	ViewData["Title"] = "Details";
 }
 
-<h1 class="text-center"><span class="text-primary">@Model.DeptName</span> Department Details</h1>
+<h1 class="text-center"><span class="text-primary">@Model.CrsName</span> Course Details</h1>
 <table class="table table-bordered table-hover text-center">
 	<thead>
 		<tr>
 			<th>Id</th>
 			<th>Name</th>
-			<th>Capacity</th>
+			<th>Duration</th>
 		</tr>
 	</thead>
 	<tbody>
 		<tr>
-			<td>@Model.DeptId</td>
-			<td>@Model.DeptName</td>
-			<td>@Model.Capacity</td>
+			<td>@Model.Id</td>
+			<td>@Model.CrsName</td>
+			<td>@Model.CrsDuration H</td>
 		</tr>
 	</tbody>
 </table>
 <div class="d-flex justify-content-center mt-4">
 	<a asp-action="index" class="btn btn-primary px-5">Return</a>
 </div>
+
+

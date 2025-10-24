@@ -1,0 +1,48 @@
+﻿@model DepartmentCoursesVM
+@{
+	ViewData["Title"] = "DepartmentAddCourses";
+}
+
+<h1 class="text-center">Add Courses To Department <span class="text-primary">@Model.Department.DeptName</span></h1>
+
+<table class="table table-bordered table-hover text-center">
+	<thead>
+		<tr>
+			<th>Id</th>
+			<th>Name</th>
+			<th>Duration</th>
+			<th>Action</th>
+		</tr>
+	</thead>
+	<tbody>
+		@if (Model.OtherCourses == null || Model.OtherCourses.Count() == 0)
+		{
+			<tr>
+				<td colspan="4" align="center">No Courses To Add Founded!</td>
+			</tr>
+		}
+		else
+		{
+			@for (int i = 0; i < Model.OtherCourses.Count(); i++)
+			{
+				<tr>
+					<td>@Model.OtherCourses.ElementAt(i).Id</td>
+					<td>@Model.OtherCourses.ElementAt(i).CrsName</td>
+					<td>@Model.OtherCourses.ElementAt(i).CrsDuration H</td>
+					<td>
+						<form asp-action="addDepartmentCourse" method="post">
+							<input type="hidden" asp-for="@Model.Department.DeptId" />
+							<input type="hidden" asp-for="@Model.Department.DeptName" />
+							<input type="hidden" asp-for="@Model.Department.Capacity" />
+							<input type="hidden" name="courseID" value="@Model.OtherCourses.ElementAt(i).Id" />
+							<button type="submit" class="btn btn-success">Add</button>
+						</form>
+					</td>
+				</tr>
+			}
+		}
+	</tbody>
+</table>
+<div class="d-flex justify-content-center mt-4">
+	<a asp-action="index" class="btn btn-primary px-5">Return</a>
+</div>

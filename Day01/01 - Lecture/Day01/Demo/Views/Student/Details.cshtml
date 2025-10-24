@@ -3,8 +3,8 @@
 	ViewData["Title"] = "Details";
 }
 
-<h1>(@Model.Name) Details:</h1>
-<table class="table table-bordered table-hover">
+<h1 class="text-center"><span class="text-primary">@Model.Name </span>Details:</h1>
+<table class="table table-bordered table-hover text-center">
 	<thead>
 		<tr>
 			<th>Id</th>
@@ -24,6 +24,6 @@
 		</tr>
 	</tbody>
 </table>
-<form action="/student/index">
-	<input type="submit" value="Return" class="btn btn-success" />
-</form>
+<div class="d-flex justify-content-center mt-4">
+	<a asp-action="index" class="btn btn-primary px-5">Return</a>
+</div>

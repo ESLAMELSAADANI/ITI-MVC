@@ -3,6 +3,7 @@ using Demo.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Demo.Migrations
 {
     [DbContext(typeof(ITIDbContext))]
-    partial class ITIDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251022110816_AddCourseTableWith_M_M_RelationShip_Department")]
+    partial class AddCourseTableWith_M_M_RelationShip_Department
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,38 +57,6 @@ namespace Demo.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Courses");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CrsDuration = 120,
-                            CrsName = "OS"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CrsDuration = 100,
-                            CrsName = "Network"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CrsDuration = 200,
-                            CrsName = "OOP"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CrsDuration = 150,
-                            CrsName = "LINQ"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CrsDuration = 170,
-                            CrsName = "DS"
-                        });
                 });
 
             modelBuilder.Entity("ModelsLayer.Models.Department", b =>
@@ -176,24 +147,6 @@ namespace Demo.Migrations
                     b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("ModelsLayer.StudentCourse", b =>
-                {
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Degree")
-                        .HasColumnType("int");
-
-                    b.HasKey("StudentId", "CourseId");
-
-                    b.HasIndex("CourseId");
-
-                    b.ToTable("StudentCourses");
-                });
-
             modelBuilder.Entity("CourseDepartment", b =>
                 {
                     b.HasOne("ModelsLayer.Course", null)
@@ -220,38 +173,9 @@ namespace Demo.Migrations
                     b.Navigation("Department");
                 });
 
-            modelBuilder.Entity("ModelsLayer.StudentCourse", b =>
-                {
-                    b.HasOne("ModelsLayer.Course", "Course")
-                        .WithMany("CourseStudents")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ModelsLayer.Models.Student", "Student")
-                        .WithMany("StudentCourses")
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Course");
-
-                    b.Navigation("Student");
-                });
-
-            modelBuilder.Entity("ModelsLayer.Course", b =>
-                {
-                    b.Navigation("CourseStudents");
-                });
-
             modelBuilder.Entity("ModelsLayer.Models.Department", b =>
                 {
                     b.Navigation("Students");
-                });
-
-            modelBuilder.Entity("ModelsLayer.Models.Student", b =>
-                {
-                    b.Navigation("StudentCourses");
                 });
 #pragma warning restore 612, 618
         }

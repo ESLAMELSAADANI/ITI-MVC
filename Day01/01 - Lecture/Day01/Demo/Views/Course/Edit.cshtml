@@ -1,0 +1,22 @@
+﻿@model Course
+@{
+	ViewData["Title"] = "Edit";
+}
+
+<h1>Edit <span class="text-primary">@Model.CrsName</span> Course</h1>
+<form method="post">
+	<input type="hidden" asp-for="Id" />
+
+	<label class="col-form-label" asp-for="CrsName">Name</label><br />
+	<input class="form-control-sm" asp-for="CrsName" /><span class="text-danger" asp-validation-for="CrsName"></span><br /><br />
+
+	<label class="col-form-label" asp-for="CrsDuration">Duration</label><br />
+	<input class="form-control-sm" asp-for="CrsDuration" /><span class="text-danger" asp-validation-for="CrsDuration"></span><br /><br />
+
+	<input asp-action="edit" type="submit" class="btn btn-primary" value="Edit" />
+	<input asp-action="delete" type="submit" class="btn btn-danger" value="Delete" />
+</form>
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial"/>
+}

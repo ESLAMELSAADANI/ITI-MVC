@@ -2,8 +2,8 @@
 @{
 	ViewData["Title"] = "Index";
 }
-<h1>Departments</h1>
-<table class="table table-bordered table-hover">
+<h1 class="text-center">Departments</h1>
+<table class="table table-bordered table-hover text-center text-center">
 	<thead>
 		<tr>
 			<th>Id</th>
@@ -17,7 +17,7 @@
 		{
 			<tr>
 				<td colspan="4" align="center">No Departments Found</td>
-			</tr> 
+			</tr>
 		}
 		else
 		{
@@ -31,12 +31,15 @@
 						@* <a class="btn btn-info" href="/department/details/@Model.ElementAt(i).DeptId">Details</a> *@
 						<!--  Use Tag Helper -->
 						<a class="btn btn-info" asp-controller="department" asp-action="details" asp-route-id="@Model.ElementAt(i).DeptId">Details</a>
-						<a class="btn btn-secondary" asp-controller="department" asp-action="edit" asp-route-id="@Model.ElementAt(i).DeptId">Edit</a>
-						<a class="btn btn-danger" asp-controller="department" asp-action="delete" asp-route-id="@Model.ElementAt(i).DeptId">Delete</a>
+						<a class="btn btn-secondary" asp-controller="department" asp-action="edit" asp-route-id="@Model.ElementAt(i).DeptId">Edit Department</a>
+						<a class="btn btn-primary" asp-controller="department" asp-action="departmentCourses" asp-route-id="@Model.ElementAt(i).DeptId">View Courses</a>
+						<a class="btn btn-success" asp-controller="department" asp-action="departmentAddCourses" asp-route-id="@Model.ElementAt(i).DeptId">Add Courses</a>
+						<a class="btn btn-secondary" asp-controller="department" asp-action="editDepartmentCourses" asp-route-id="@Model.ElementAt(i).DeptId">Edit Courses</a>
+						<a class="btn btn-danger" asp-controller="department" asp-action="delete" asp-route-id="@Model.ElementAt(i).DeptId">Delete Department</a>
 					</td>
 				</tr>
 			}
 		}
-	</tbody>  
+	</tbody>
 </table>
 

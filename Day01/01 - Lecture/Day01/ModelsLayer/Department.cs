@@ -15,8 +15,10 @@ namespace ModelsLayer.Models
         public string DeptName { get; set; }
         [Required(ErrorMessage = "Enter Capacity!")]
         public int Capacity { get; set; }
-        public List<Student> Students { get; set; } = new List<Student>();
         public bool IsActive { get; set; } = true;
+        public List<Student> Students { get; set; } = new List<Student>();
+        public List<Course> Courses { get; set; } = new List<Course>();
+
         public override string ToString()
         {
             return $"DeptId= {DeptId} - DeptName= {DeptName} - Capacity= {Capacity}";

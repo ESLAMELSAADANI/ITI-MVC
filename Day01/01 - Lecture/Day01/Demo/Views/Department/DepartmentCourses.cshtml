@@ -1,0 +1,49 @@
+﻿@model Department
+@{
+	ViewData["Title"] = "DepartmentCourses";
+}
+
+<h1 class="text-center">Courses Of Department <span class="text-primary">@Model.DeptName</span></h1>
+
+<table class="table table-bordered table-hover text-center">
+	<thead>
+		<tr>
+			<th>Id</th>
+			<th>Name</th>
+			<th>Duration</th>
+			<th>Action</th>
+		</tr>
+	</thead>
+	<tbody>
+		@if (Model == null || Model.Courses.Count() == 0)
+		{
+			<tr>
+				<td colspan="4" align="center">No Courses Founded!</td>
+			</tr>
+		}
+		else
+		{
+			@for (int i = 0; i < Model.Courses.Count(); i++)
+			{
+				<tr>
+					<td>@Model.Courses.ElementAt(i).Id</td>
+					<td>@Model.Courses.ElementAt(i).CrsName</td>
+					<td>@Model.Courses.ElementAt(i).CrsDuration H</td>
+					<td>
+						<a asp-controller="department" asp-action="ViewCourseStudents" asp-route-crsId="@Model.Courses.ElementAt(i).Id" asp-route-deptID="@Model.DeptId" class="btn btn-primary">View Students</a>
+						<form asp-action="deleteDepartmentCourse" method="post" class="d-inline">
+							<input type="hidden" asp-for="@Model.DeptId" />
+							<input type="hidden" asp-for="@Model.DeptName" />
+							<input type="hidden" asp-for="@Model.Capacity" />
+							<input type="hidden" name="courseID" value="@Model.Courses.ElementAt(i).Id" />
+							<button type="submit" class="btn btn-danger">Delete Course</button>
+						</form>
+					</td>
+				</tr>
+			}
+		}
+	</tbody>
+</table>
+<div class="d-flex justify-content-center mt-4">
+	<a asp-action="index" class="btn btn-primary px-5">Return</a>
+</div>

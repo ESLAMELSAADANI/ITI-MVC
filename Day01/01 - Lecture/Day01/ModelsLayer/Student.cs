@@ -24,6 +24,7 @@ namespace ModelsLayer.Models
         [Required(ErrorMessage = "Please select a department!")]
         public int DeptNo { get; set; }
         public Department? Department { get; set; }
+        public List<StudentCourse> StudentCourses { get; set; } = new List<StudentCourse>();
 
         public override string ToString()
         {

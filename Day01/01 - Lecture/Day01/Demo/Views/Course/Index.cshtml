@@ -1,0 +1,40 @@
+﻿@model List<Course>
+@{
+	ViewData["Title"] = "Index";
+}
+
+<h1 class="text-center">Courses</h1>
+<table class="table table-bordered table-hover text-center">
+	<thead>
+		<tr>
+			<th>Id</th>
+			<th>Name</th>
+			<th>Duration</th>
+			<th>Actions</th>
+		</tr>
+	</thead>
+	<tbody>
+		@if (Model == null || Model.Count == 0)
+		{
+			<tr>
+				<td colspan="4">No Courses Founded!</td>
+			</tr>
+		}
+		else
+		{
+			@foreach (var course in Model)
+			{
+				<tr>
+					<td>@course.Id</td>
+					<td>@course.CrsName</td>
+					<td>@course.CrsDuration H</td>
+					<td>
+						<a asp-action="Details" asp-controller="Course" class="btn btn-info" asp-route-id="@course.Id">Details</a>
+						<a asp-action="Edit" asp-controller="Course" class="btn btn-secondary" asp-route-id="@course.Id">Edit</a>
+						<a asp-action="Delete" asp-controller="Course" class="btn btn-danger" asp-route-id="@course.Id">Delete</a>
+					</td>
+				</tr>
+			}
+		}
+	</tbody>
+</table>

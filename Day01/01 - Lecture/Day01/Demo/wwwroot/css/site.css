@@ -19,8 +19,16 @@ html {
 
 body {
     margin-bottom: 60px;
+    height: 100%;
 }
 
 .field-validation-error {
     color: red;
+}
+
+footer.footer {
+    background-color: #f8f9fa; /* light gray */
+    padding: 20px 0; /* increase vertical space */
+    text-align: center;
+    font-size: 1.1rem;
 }

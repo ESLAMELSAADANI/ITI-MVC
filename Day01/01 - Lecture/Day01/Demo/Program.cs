@@ -1,6 +1,8 @@
 using Demo.DAL;
 using Demo.Repos;
+using Demo.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using ModelsLayer;
 using ModelsLayer.Models;
 
 namespace Demo
@@ -15,6 +17,9 @@ namespace Demo
             builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<IEntityRepo<Department>, DepartmentRepo>();
             builder.Services.AddScoped<IEntityRepo<Student>, StudentRepo>();
+            builder.Services.AddScoped<IEntityRepo<Course>, CourseRepo>();
+            builder.Services.AddScoped<IEntityRepo<StudentCourse>, StudentCourseRepo>();
+            builder.Services.AddScoped<IGetStudentCourse,StudentCourseRepo>();
             builder.Services.AddScoped<IEmailExist, StudentRepo>();
             builder.Services.AddScoped<IIdExist, DepartmentRepo>();
 
@@ -39,7 +44,7 @@ namespace Demo
             app.UseStaticFiles();
 
             app.UseRouting();
-             
+
             app.UseAuthorization();
 
             app.MapControllerRoute(

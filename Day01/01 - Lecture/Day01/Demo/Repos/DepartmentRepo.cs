@@ -63,7 +63,7 @@ namespace Demo.Repos
 
         public Department Get(int id)
         {
-            return dbContext.Department.SingleOrDefault(d => d.DeptId == id);
+            return dbContext.Department.Include(d => d.Courses).Include(d => d.Students).ThenInclude(d => d.StudentCourses).SingleOrDefault(d => d.DeptId == id);
         }
 
         public List<Department> GetAll()
