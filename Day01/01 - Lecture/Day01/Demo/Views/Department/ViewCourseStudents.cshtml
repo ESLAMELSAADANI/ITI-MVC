@@ -13,7 +13,10 @@
 	<div class="col-md-6">
 		<form method="post" asp-action="UpdateDegree">
 			<input type="hidden" asp-for="Department.DeptId" />
+			<input type="hidden" asp-for="Department.DeptName" />
 			<input type="hidden" asp-for="Course.Id" />
+			<input type="hidden" asp-for="Course.CrsName" />
+			<input type="hidden" asp-for="Course.CrsDuration" />
 
 			<h4 class="text-center text-success">Enrolled Students</h4>
 			<table class="table table-bordered table-hover text-center">
@@ -81,7 +84,10 @@
 		{
 			<form method="post" asp-action="EnrollSelectedStudents">
 				<input type="hidden" asp-for="Department.DeptId" />
+				<input type="hidden" asp-for="Department.DeptName" />
 				<input type="hidden" asp-for="Course.Id" />
+				<input type="hidden" asp-for="Course.CrsName" />
+				<input type="hidden" asp-for="Course.CrsDuration" />
 				<table class="table table-bordered table-hover text-center">
 					<thead>
 						<tr>

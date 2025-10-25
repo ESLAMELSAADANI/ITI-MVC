@@ -48,7 +48,7 @@ namespace Demo.Controllers
         [HttpPost]
         public IActionResult Create(Department dept)
         {
-            try
+            if (ModelState.IsValid)
             {
                 //dbContext.Department.Add(dept);
                 //dbContext.SaveChanges();
@@ -59,11 +59,7 @@ namespace Demo.Controllers
                 //departmentRepo.Dispose();
                 return RedirectToAction("index");
             }
-            catch (Exception ex)
-            {
-
-                return View("exception", ex);
-            }
+            return RedirectToAction("Create");
         }
         // department/details/500   =>  500 will binded to the passed parameter id [Route System Behavior]
         public IActionResult Details(int? id)
@@ -96,29 +92,33 @@ namespace Demo.Controllers
                 //departmentRepo.Dispose();
                 return NotFound();
             }
+
             //departmentRepo.Dispose();
             return View(dept);
         }
         [HttpPost]
         public IActionResult Edit(Department dept)
         {
-            try
+            if (ModelState.IsValid)
             {
-                //dbContext.Department.Update(dept);
-                //dbContext.SaveChanges();
-                //return RedirectToAction("index");
+                try
+                {
+                    //dbContext.Department.Update(dept);
+                    //dbContext.SaveChanges();
+                    //return RedirectToAction("index");
 
+                    departmentRepo.Update(dept);
+                    departmentRepo.Save();
+                    //departmentRepo.Dispose();
+                    return RedirectToAction("index");
+                }
+                catch (Exception ex)
+                {
 
-                departmentRepo.Update(dept);
-                departmentRepo.Save();
-                //departmentRepo.Dispose();
-                return RedirectToAction("index");
+                    return View("exception", ex);
+                }
             }
-            catch (Exception ex)
-            {
-
-                return View("exception", ex);
-            }
+            return RedirectToAction("Edit", new { id = dept.DeptId });
         }
         //For View Department Courses Details and can delete course
         public IActionResult DepartmentCourses(int? id)
@@ -208,7 +208,10 @@ namespace Demo.Controllers
         {
             if (id == null)
                 return BadRequest();
-            try
+            var department = departmentRepo.Get(id.Value);
+            if (department == null)
+                return NotFound();
+            if (ModelState.IsValid)
             {
                 //var dept = dbContext.Department.SingleOrDefault(d => d.DeptId == id);
                 //dbContext.Department.Remove(dept);
@@ -221,16 +224,12 @@ namespace Demo.Controllers
                 //departmentRepo.Dispose();
                 return RedirectToAction("index");
             }
-            catch (Exception ex)
-            {
-
-                return View("exception", ex);
-            }
+            return RedirectToAction("index");
         }
         [HttpPost]
         public IActionResult Delete(Department dept)
         {
-            try
+            if (ModelState.IsValid)
             {
                 ////var dept = dbContext.Department.SingleOrDefault(d => d.DeptId == id);
                 //dbContext.Department.Remove(dept);
@@ -242,11 +241,7 @@ namespace Demo.Controllers
                 //departmentRepo.Dispose();
                 return RedirectToAction("index");
             }
-            catch (Exception ex)
-            {
-
-                return View("exception", ex);
-            }
+            return RedirectToAction("edit", new { id = dept.DeptId });
         }
         public IActionResult IdExist(int DeptId)
         {
@@ -288,33 +283,41 @@ namespace Demo.Controllers
         [HttpPost]
         public IActionResult UpdateDegree(DepartmentCourseStudentsVM model)
         {
-            foreach (var item in model.StudentCourseDegrees)
+            if (ModelState.IsValid)
             {
-                var studentCourse = StudentCourseRepoGet.Get(item.StudentId, item.CourseId);
-                if (studentCourse != null)
-                    studentCourse.Degree = item.Degree;
+                foreach (var item in model.StudentCourseDegrees)
+                {
+                    var studentCourse = StudentCourseRepoGet.Get(item.StudentId, item.CourseId);
+                    if (studentCourse != null)
+                        studentCourse.Degree = item.Degree;
+                }
+                studentCourseRepo.Save();
+                return RedirectToAction("ViewCourseStudents", new { crsId = model.Course.Id, deptID = model.Department.DeptId });
             }
-            studentCourseRepo.Save();
             return RedirectToAction("ViewCourseStudents", new { crsId = model.Course.Id, deptID = model.Department.DeptId });
         }
         public IActionResult EnrollSelectedStudents(DepartmentCourseStudentsVM model)
         {
-            if (model.SelectedStudentIds != null && model.SelectedStudentIds.Any())
+            if (ModelState.IsValid)
             {
-                for(int i=0;i< model.SelectedStudentIds.Count;i++ )
+                if (model.SelectedStudentIds != null && model.SelectedStudentIds.Any())
                 {
-                    // Add a StudentCourse record for each selected student
-                    studentCourseRepo.Insert(new StudentCourse
+                    for (int i = 0; i < model.SelectedStudentIds.Count; i++)
                     {
-                        StudentId = model.SelectedStudentIds[i],
-                        CourseId = model.Course.Id,
-                        Degree = model.OtherStudents[i].Degree
-                    });
+                        // Add a StudentCourse record for each selected student
+                        studentCourseRepo.Insert(new StudentCourse
+                        {
+                            StudentId = model.SelectedStudentIds[i],
+                            CourseId = model.Course.Id,
+                            Degree = model.OtherStudents[i].Degree
+                        });
+                    }
+                    studentCourseRepo.Save();
                 }
-                studentCourseRepo.Save();
-            }
 
-            // Redirect back to the same page to see updates
+                // Redirect back to the same page to see updates
+                return RedirectToAction("ViewCourseStudents", new { crsId = model.Course.Id, deptID = model.Department.DeptId });
+            }
             return RedirectToAction("ViewCourseStudents", new { crsId = model.Course.Id, deptID = model.Department.DeptId });
         }
         public IActionResult DeleteStudentCourse(int stdID, int crsID, int deptId)
