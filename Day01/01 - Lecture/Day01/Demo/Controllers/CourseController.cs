@@ -39,9 +39,14 @@ namespace Demo.Controllers
         [HttpPost]
         public IActionResult Edit(Course course)
         {
-            courseRepo.Update(course);
-            courseRepo.Save();
-            return RedirectToAction("index");
+            if (ModelState.IsValid)
+            {
+                courseRepo.Update(course);
+                courseRepo.Save();
+                return RedirectToAction("index");
+            }
+            var ccourse = courseRepo.Get(course.Id);
+            return View(ccourse);
         }
         [HttpGet]
         public IActionResult Delete(int? id)
@@ -70,9 +75,13 @@ namespace Demo.Controllers
         [HttpPost]
         public IActionResult Add(Course course)
         {
-            courseRepo.Insert(course);
-            courseRepo.Save();
-            return RedirectToAction("index");
+            if (ModelState.IsValid)
+            {
+                courseRepo.Insert(course);
+                courseRepo.Save();
+                return RedirectToAction("index");
+            }
+            return View();
         }
     }
 }

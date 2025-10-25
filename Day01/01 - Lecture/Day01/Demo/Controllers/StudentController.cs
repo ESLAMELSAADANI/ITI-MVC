@@ -29,7 +29,7 @@ namespace Demo.Controllers
             departmentRepo = _departmentRepo;
             studentEmailExist = _studentEmailExist;
         }
-        
+
         public IActionResult Index()
         {
             //int x = int.Parse("ssss");//Simulate there are exception to test Development and production Environment.
@@ -74,6 +74,11 @@ namespace Demo.Controllers
 
             //==== Repository Design Pattern =========
             //==== Validation On student properties values ====
+            //if (studentEmailExist.IsEmailExist(studentDepartment.Student.Email))
+            //    ModelState.AddModelError("Email", "This email is already in use.");
+            if (studentEmailExist.IsEmailExist(studentDepartment.Student.Email))
+                ModelState.AddModelError("Student.Email", "This email is already in use.");
+
             if (ModelState.IsValid)
             {
                 var hasher = new PasswordHasher<Student>();
@@ -110,7 +115,7 @@ namespace Demo.Controllers
             StudentDepartment studentDepartment = new StudentDepartment()
             {
                 Student = student,
-                Departments = departmentRepo.GetAll()
+                Departments = depts
             };
             //departmentRepo.Dispose();
             return View(studentDepartment);
@@ -123,15 +128,27 @@ namespace Demo.Controllers
             //return RedirectToAction("index");
 
             //===== Repository Design Pattern =======
+            if (studentEmailExist.IsEmailExist(student.Email))
+                ModelState.AddModelError("Student.Email", "This email is already in use.");
+            if (ModelState.IsValid)
+            {
+                var hasher = new PasswordHasher<Student>();
+                // Hash the password before saving it
+                student.Password = hasher.HashPassword(student, student.Password);
 
-            var hasher = new PasswordHasher<Student>();
-            // Hash the password before saving it
-            student.Password = hasher.HashPassword(student, student.Password);
+                studentRepo.Update(student);
+                studentRepo.Save();
+                //studentRepo.Dispose();
+                return RedirectToAction("index");
+            }
+            var depts = departmentRepo.GetAll();
+            StudentDepartment model = new StudentDepartment()
+            {
+                Student = student,
+                Departments = depts
 
-            studentRepo.Update(student);
-            studentRepo.Save();
-            //studentRepo.Dispose();
-            return RedirectToAction("index");
+            };
+            return View(model);
         }
         [HttpGet]
         public IActionResult Delete(int? id)

@@ -6,7 +6,7 @@ namespace Demo.ViewModels
     {
         public int StudentId { get; set; }
         public int CourseId { get; set; }
-        [Range(0, 100, ErrorMessage = "Degree must be between 0 and 100.")]
+        [Range(0, 100, ErrorMessage = "Keep Degree Between 0-100")]
         public int? Degree { get; set; }
     }
 }
