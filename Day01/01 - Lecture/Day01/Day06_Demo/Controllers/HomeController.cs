@@ -1,9 +1,11 @@
+using Day06_Demo.CustomFilters;
 using Day06_Demo.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace Day06_Demo.Controllers
 {
+    //[MyExceptionFilter]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -15,6 +17,13 @@ namespace Day06_Demo.Controllers
 
         public IActionResult Index()
         {
+            return View();
+        }
+        [MyExceptionFilter]
+        public IActionResult About()
+        {
+            Console.WriteLine("In About() Action");
+            int x = int.Parse("Exception");
             return View();
         }
 

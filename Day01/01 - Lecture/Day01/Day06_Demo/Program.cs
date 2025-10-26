@@ -13,7 +13,7 @@ namespace Day06_Demo
                 s.IdleTimeout = TimeSpan.FromMinutes(30);
                 s.Cookie.Name = "MySessionCookie";
             });
-
+             
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
