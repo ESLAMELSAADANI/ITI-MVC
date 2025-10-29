@@ -3,23 +3,81 @@
 	ViewData["Title"] = "Details View";
 }
 
-<h1 class="text-center"><span class="text-primary">@Model.DeptName</span> Department Details</h1>
-<table class="table table-bordered table-hover text-center">
-	<thead>
-		<tr>
-			<th>Id</th>
-			<th>Name</th>
-			<th>Capacity</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			<td>@Model.DeptId</td>
-			<td>@Model.DeptName</td>
-			<td>@Model.Capacity</td>
-		</tr>
-	</tbody>
-</table>
-<div class="d-flex justify-content-center mt-4">
-	<a asp-action="index" class="btn btn-primary px-5">Return</a>
+<div class="container my-5">
+	<div class="row justify-content-center">
+		<div class="col-md-6">
+			<div class="card shadow-lg rounded-4 hover-card p-4">
+				<h2 class="text-center mb-4 text-primary fw-bold">
+					<i class="bi bi-building"></i> @Model.DeptName Department Details
+				</h2>
+
+				<div class="table-responsive">
+					<table class="table table-striped table-hover align-middle text-center mb-0">
+						<thead class="table-primary">
+							<tr>
+								<th><i class="bi bi-hash"></i> Id</th>
+								<th><i class="bi bi-card-text"></i> Name</th>
+								<th><i class="bi bi-people-fill"></i> Capacity</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>@Model.DeptId</td>
+								<td>@Model.DeptName</td>
+								<td>@Model.Capacity</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="d-flex justify-content-center mt-4">
+					<a asp-action="index" class="btn btn-primary btn-lg hover-btn">
+						<i class="bi bi-arrow-left-circle"></i> Return
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
+
+<style>
+	body {
+		background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+	}
+
+	.card {
+		border-radius: 1rem;
+		transition: transform 0.3s, box-shadow 0.3s;
+	}
+
+	.hover-card:hover {
+		transform: translateY(-5px) scale(1.02);
+		box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+	}
+
+	.table-hover tbody tr:hover {
+		background-color: #f1f5f9;
+		transform: scale(1.01);
+		transition: all 0.2s;
+	}
+
+	.btn.hover-btn {
+		transition: transform 0.2s;
+	}
+
+		.btn.hover-btn:hover {
+			transform: scale(1.05);
+		}
+
+	tbody td {
+		vertical-align: middle;
+	}
+
+	.table-responsive {
+		overflow-x: auto;
+	}
+
+	.table thead th i {
+		margin-right: 5px;
+	}
+</style>

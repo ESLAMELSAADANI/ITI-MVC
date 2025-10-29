@@ -1,48 +1,112 @@
 ﻿@model DepartmentCoursesVM
 @{
-	ViewData["Title"] = "DepartmentAddCourses";
+    ViewData["Title"] = "DepartmentAddCourses";
 }
 
-<h1 class="text-center">Add Courses To Department <span class="text-primary">@Model.Department.DeptName</span></h1>
+<div class="container my-5">
+    <!-- Page Title -->
+    <h1 class="text-center mb-5 display-6 fw-bold">
+        Add Courses To Department <span class="text-primary">@Model.Department.DeptName</span>
+    </h1>
 
-<table class="table table-bordered table-hover text-center">
-	<thead>
-		<tr>
-			<th>Id</th>
-			<th>Name</th>
-			<th>Duration</th>
-			<th>Action</th>
-		</tr>
-	</thead>
-	<tbody>
-		@if (Model.OtherCourses == null || Model.OtherCourses.Count() == 0)
-		{
-			<tr>
-				<td colspan="4" align="center">No Courses To Add Founded!</td>
-			</tr>
-		}
-		else
-		{
-			@for (int i = 0; i < Model.OtherCourses.Count(); i++)
-			{
-				<tr>
-					<td>@Model.OtherCourses.ElementAt(i).Id</td>
-					<td>@Model.OtherCourses.ElementAt(i).CrsName</td>
-					<td>@Model.OtherCourses.ElementAt(i).CrsDuration H</td>
-					<td>
-						<form asp-action="addDepartmentCourse" method="post">
-							<input type="hidden" asp-for="@Model.Department.DeptId" />
-							<input type="hidden" asp-for="@Model.Department.DeptName" />
-							<input type="hidden" asp-for="@Model.Department.Capacity" />
-							<input type="hidden" name="courseID" value="@Model.OtherCourses.ElementAt(i).Id" />
-							<button type="submit" class="btn btn-success">Add</button>
-						</form>
-					</td>
-				</tr>
-			}
-		}
-	</tbody>
-</table>
-<div class="d-flex justify-content-center mt-4">
-	<a asp-action="index" class="btn btn-primary px-5">Return</a>
+    @if (Model.OtherCourses == null || !Model.OtherCourses.Any())
+    {
+        <!-- Empty State -->
+        <div class="d-flex flex-column align-items-center justify-content-center mt-5 py-5 bg-light rounded-4 shadow-sm">
+            <i class="bi bi-journal-plus fs-1 text-success mb-3"></i>
+            <p class="text-muted fs-5 text-center">No Courses Available To Add!</p>
+            <a asp-controller="Course" asp-action="Add" class="btn btn-success btn-lg mt-3 hover-btn">
+                <i class="bi bi-plus-circle"></i> Add New Course
+            </a>
+        </div>
+    }
+    else
+    {
+        <!-- Courses Grid -->
+        <div class="row g-4">
+            @for (int i = 0; i < Model.OtherCourses.Count(); i++)
+            {
+                var course = Model.OtherCourses.ElementAt(i);
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 border-0 shadow-lg rounded-4 hover-card">
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <div>
+                                <h5 class="card-title text-success fw-bold mb-3">
+                                    <i class="bi bi-journal-plus-fill"></i> @course.CrsName
+                                </h5>
+                                <p class="card-text mb-2">
+                                    <i class="bi bi-hash"></i> <strong>Id:</strong> @course.Id
+                                </p>
+                                <p class="card-text mb-3">
+                                    <i class="bi bi-clock-fill"></i> <strong>Duration:</strong> @course.CrsDuration H
+                                </p>
+                            </div>
+                            <div class="mt-auto d-flex justify-content-center">
+                                <form asp-action="addDepartmentCourse" method="post">
+                                    <input type="hidden" asp-for="@Model.Department.DeptId" />
+                                    <input type="hidden" asp-for="@Model.Department.DeptName" />
+                                    <input type="hidden" asp-for="@Model.Department.Capacity" />
+                                    <input type="hidden" name="courseID" value="@course.Id" />
+                                    <button type="submit" class="btn btn-success btn-lg hover-btn">
+                                        <i class="bi bi-plus-circle"></i> Add
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    <!-- Return Button -->
+    <div class="d-flex justify-content-center mt-5">
+        <a asp-action="index" class="btn btn-primary btn-lg hover-btn">
+            <i class="bi bi-arrow-left-circle"></i> Return
+        </a>
+    </div>
 </div>
+
+<style>
+    body {
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    }
+
+    .card {
+        border-radius: 1.2rem;
+        transition: transform 0.3s, box-shadow 0.3s;
+        background: linear-gradient(145deg, #ffffff, #f1f3f5);
+    }
+
+    .hover-card:hover {
+        transform: translateY(-6px) scale(1.03);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .hover-btn {
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+        .hover-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+    .card-title i, .card-text i, .btn i {
+        margin-right: 6px;
+    }
+
+    /* Empty state styling */
+    .empty-state i {
+        font-size: 4rem;
+    }
+
+    @@media (max-width: 576px) {
+        .card-body
+
+    {
+        text-align: center;
+    }
+
+    }
+</style>

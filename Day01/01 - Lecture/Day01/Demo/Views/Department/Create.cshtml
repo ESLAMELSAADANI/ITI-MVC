@@ -1,32 +1,103 @@
 ﻿@model Department
 @{
-	ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create";
 }
 
-<h1>Add New Department</h1>
-@* <form action="/department/create" method="post">
-	<input type="number" name="DeptId" placeholder="Enter DeptId" /><br />
-	<input type="text" name="DeptName" placeholder="Enter DeptName" /><br />
-	<input type="number" name="Capacity" placeholder="Enter Capacity" /><br />
-	<input type="submit" value="Add" class="btn btn-success" />
-</form> *@
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg rounded-4 p-4">
+                <!-- Card Header -->
+                <div class="card-header text-center bg-gradient-primary text-white rounded-3 mb-4">
+                    <h3><i class="bi bi-building"></i> Add New Department</h3>
+                </div>
 
-<!--      Use Tag Helper (asp-for)        -->
-@* <form  href="/department/create" method="post"> *@
-@* <form  method="post"> <!-- Automatically after click on Add button, will send request to server same as current URL request but with (Post) method => Post http:localhost:3040/department/create --> *@
-<form asp-controller="department" asp-action="create">
-	<!-- Automatically after click on Add button, will send request to server same as current URL request but with (Post) method => Post http:localhost:3040/department/create -->
-	<label asp-for="DeptId" class="col-form-label">Id</label><br />
-	<input class="form-control-sm" asp-for="@Model.DeptId" placeholder="Enter DeptId" /><span class="text-danger" asp-validation-for="DeptId"></span><br /><br />
+                <!-- Form -->
+                <form asp-controller="department" asp-action="create">
+                    <!-- DeptId -->
+                    <div class="form-floating mb-3">
+                        <input class="form-control" asp-for="DeptId" placeholder="Enter Department Id" />
+                        <label asp-for="DeptId"><i class="bi bi-hash"></i> Department Id</label>
+                        <span class="text-danger" asp-validation-for="DeptId"></span>
+                    </div>
 
-	<label asp-for="DeptName" class="col-form-label">Name</label><br />
-	<input class="form-control-sm" asp-for="@Model.DeptName" placeholder="Enter DeptName" /><span class="text-danger" asp-validation-for="DeptName"></span><br /><br />
+                    <!-- DeptName -->
+                    <div class="form-floating mb-3">
+                        <input class="form-control" asp-for="DeptName" placeholder="Enter Department Name" />
+                        <label asp-for="DeptName"><i class="bi bi-card-text"></i> Department Name</label>
+                        <span class="text-danger" asp-validation-for="DeptName"></span>
+                    </div>
 
-	<label asp-for="Capacity" class="col-form-label">Capacity</label><br />
-	<input class="form-control-sm" asp-for="@Model.Capacity" placeholder="Enter Capacity" /><span class="text-danger" asp-validation-for="Capacity"></span><br /><br />
+                    <!-- Capacity -->
+                    <div class="form-floating mb-4">
+                        <input class="form-control" asp-for="Capacity" placeholder="Enter Capacity" />
+                        <label asp-for="Capacity"><i class="bi bi-people-fill"></i> Capacity</label>
+                        <span class="text-danger" asp-validation-for="Capacity"></span>
+                    </div>
 
-	<input type="submit" value="Add" class="btn btn-success" />
-</form>
+                    <!-- Buttons -->
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-success btn-lg hover-btn">
+                            <i class="bi bi-plus-circle"></i> Add Department
+                        </button>
+                        <a asp-controller="department" asp-action="index" class="btn btn-secondary btn-lg hover-btn">
+                            <i class="bi bi-arrow-left-circle"></i> Return
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    }
+
+    .card {
+        border-radius: 1.5rem;
+        transition: transform 0.3s, box-shadow 0.3s;
+        background: #ffffff;
+    }
+
+        .card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+    .hover-btn {
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+        .hover-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+    .card-header {
+        background: linear-gradient(to right, #4a90e2, #007bff);
+    }
+
+    .form-floating > label i {
+        margin-right: 6px;
+    }
+
+    @@media (max-width: 576px) {
+        .card-body
+
+    {
+        text-align: center;
+    }
+
+    .d-flex.justify-content-between {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    }
+</style>
+
 @section scripts {
-	<partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial" />
 }

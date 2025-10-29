@@ -1,44 +1,80 @@
 ﻿@model StudentDepartment
 @{
-	ViewData["Title"] = "Add";
-	SelectList deptsSL = new SelectList(Model.Departments, "DeptId", "DeptName");
+    ViewData["Title"] = "Add Student";
+    SelectList deptsSL = new SelectList(Model.Departments, "DeptId", "DeptName");
 }
 
-<h1>Add New Student</h1>
-<form method="post">
-	<label asp-for="@Model.Student.Name" class="col-form-label">Name</label><br />
-	<input asp-for="@Model.Student.Name" placeholder="Enter The Name" class="form-control-sm" /><span class="text-danger" asp-validation-for="Student.Name"> </span><br /><br />
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-primary text-white text-center fw-bold fs-4">
+                    <i class="bi bi-person-plus"></i> Add New Student
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Add" method="post" novalidate>
 
-	<label asp-for="@Model.Student.Age" class="col-form-label">Age</label><br />
-	<input asp-for="@Model.Student.Age" placeholder="Enter The Age" class="form-control-sm" /><span class="text-danger" asp-validation-for="Student.Age"> </span><br /><br />
+                        <!-- Name -->
+                        <div class="mb-3">
+                            <label asp-for="Student.Name" class="form-label fw-semibold">Name</label>
+                            <input asp-for="Student.Name" class="form-control" placeholder="Enter student name" />
+                            <span asp-validation-for="Student.Name" class="text-danger small"></span>
+                        </div>
 
-	<label asp-for="@Model.Student.Email" class="col-form-label">Email</label><br />
-	<input asp-for="@Model.Student.Email" placeholder="example@email.com" class="form-control-sm" /><span class="text-danger" asp-validation-for="Student.Email"> </span><br /><br />
+                        <!-- Age -->
+                        <div class="mb-3">
+                            <label asp-for="Student.Age" class="form-label fw-semibold">Age</label>
+                            <input asp-for="Student.Age" class="form-control" placeholder="Enter student age" />
+                            <span asp-validation-for="Student.Age" class="text-danger small"></span>
+                        </div>
 
-	<label asp-for="@Model.Student.DeptNo" class="col-form-label">DeptName</label><br />
-	<select class="form-select-sm" asp-items="@deptsSL" asp-for="@Model.Student.DeptNo">
+                        <!-- Email -->
+                        <div class="mb-3">
+                            <label asp-for="Student.Email" class="form-label fw-semibold">Email</label>
+                            <input asp-for="Student.Email" class="form-control" placeholder="example@email.com" />
+                            <span asp-validation-for="Student.Email" class="text-danger small"></span>
+                        </div>
 
-		@* @foreach (Department dept in Model.Departments)
-		{
-			<option value="@dept.DeptId">@dept.DeptName</option>
-		} *@
-		<option value="">-- Select Department --</option>
-	</select><span class="text-danger" asp-validation-for="Student.DeptNo"> </span><br /><br />
+                        <!-- Department -->
+                        <div class="mb-3">
+                            <label asp-for="Student.DeptNo" class="form-label fw-semibold">Department</label>
+                            <select asp-for="Student.DeptNo" asp-items="@deptsSL" class="form-select">
+                                <option value="">-- Select Department --</option>
+                            </select>
+                            <span asp-validation-for="Student.DeptNo" class="text-danger small"></span>
+                        </div>
 
-	<label asp-for="@Model.Student.Password" class="col-form-label">Password</label><br />
-	<input type="password" asp-for="@Model.Student.Password" placeholder="*******" class="form-control-sm" /><span class="text-danger" asp-validation-for="Student.Password"> </span><br /><br />
+                        <!-- Password -->
+                        <div class="mb-3">
+                            <label asp-for="Student.Password" class="form-label fw-semibold">Password</label>
+                            <input asp-for="Student.Password" type="password" class="form-control" placeholder="*******" />
+                            <span asp-validation-for="Student.Password" class="text-danger small"></span>
+                        </div>
 
-	<label asp-for="@Model.Student.ConfirmPassword" class="col-form-label">Confirm Password</label><br />
-	<input type="password" asp-for="@Model.Student.ConfirmPassword" placeholder="*******" class="form-control-sm" /><span class="text-danger" asp-validation-for="Student.ConfirmPassword"> </span><br /><br />
+                        <!-- Confirm Password -->
+                        <div class="mb-4">
+                            <label asp-for="Student.ConfirmPassword" class="form-label fw-semibold">Confirm Password</label>
+                            <input asp-for="Student.ConfirmPassword" type="password" class="form-control" placeholder="*******" />
+                            <span asp-validation-for="Student.ConfirmPassword" class="text-danger small"></span>
+                        </div>
 
-	<input type="submit" asp-action="add" value="Add" class="btn btn-success" />
-</form>
-@* This enables client-side (live) validation — so the user sees the message immediately without refreshing the page [Request The Server ]. *@
+                        <!-- Buttons -->
+                        <div class="d-flex justify-content-center gap-3">
+                            <button type="submit" class="btn btn-success px-5">
+                                <i class="bi bi-plus-circle"></i> Add
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary px-5">
+                                <i class="bi bi-arrow-left"></i> Back
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
-	@* option one *@
-	@* <partial name="_ValidationScriptsPartial" /> *@
-
-	@* option two -> use the scripts that make the clientSide validation => those scripts are in file _ValidationScriptsPartial so can use option one*@
-	<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-	<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 }

@@ -1,27 +1,80 @@
 ﻿@model Course
 @{
-	ViewData["Title"] = "Details";
+    ViewData["Title"] = "Course Details";
 }
 
-<h1 class="text-center"><span class="text-primary">@Model.CrsName</span> Course Details</h1>
-<table class="table table-bordered table-hover text-center">
-	<thead>
-		<tr>
-			<th>Id</th>
-			<th>Name</th>
-			<th>Duration</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			<td>@Model.Id</td>
-			<td>@Model.CrsName</td>
-			<td>@Model.CrsDuration H</td>
-		</tr>
-	</tbody>
-</table>
-<div class="d-flex justify-content-center mt-4">
-	<a asp-action="index" class="btn btn-primary px-5">Return</a>
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h1 class="fw-bold display-5">
+            <span class="text-primary">@Model.CrsName</span> Course Details
+        </h1>
+        <p class="text-muted">Here’s everything you need to know about this course.</p>
+    </div>
+
+    <div class="card shadow-lg border-0 rounded-4 mx-auto" style="max-width: 700px;">
+        <div class="card-body p-5">
+            <table class="table table-borderless align-middle text-center mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="fs-5">ID</th>
+                        <th class="fs-5">Name</th>
+                        <th class="fs-5">Duration</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="table-hover">
+                        <td class="fw-semibold">@Model.Id</td>
+                        <td class="fw-semibold">@Model.CrsName</td>
+                        <td class="fw-semibold">@Model.CrsDuration H</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="text-center mt-5">
+        <a asp-action="Index" class="btn btn-lg btn-primary px-5 shadow-sm rounded-pill">
+            <i class="bi bi-arrow-left-circle me-2"></i> Return to List
+        </a>
+    </div>
 </div>
 
+<style>
+    body {
+        background: #f8f9fc;
+    }
 
+    .card {
+        animation: fadeIn 0.8s ease-in-out;
+    }
+
+    @@keyframes fadeIn {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #0d6efd, #4b8bf4);
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #0056d2, #0d6efd);
+            transform: scale(1.05);
+        }
+
+    th {
+        background-color: #f1f3f6;
+    }
+</style>

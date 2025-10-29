@@ -1,21 +1,85 @@
 ﻿@model Course
 @{
-	ViewData["Title"] = "Add";
+    ViewData["Title"] = "Add Course";
 }
 
-<h1>Add New Course</h1>
-<form method="post">
-	<input type="hidden" asp-for="Id" />
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h1 class="fw-bold text-primary display-6">Add New Course</h1>
+        <p class="text-muted">Fill in the details below to add a new course to the system.</p>
+    </div>
 
-	<label class="col-form-label" asp-for="CrsName">Name</label><br />
-	<input class="form-control-sm" asp-for="CrsName" placeholder="Enter Course Name!" /><span class="text-danger" asp-validation-for="CrsName"></span><br /><br />
+    <div class="card shadow-lg border-0 rounded-4 mx-auto" style="max-width: 600px;">
+        <div class="card-body p-5">
+            <form method="post" class="needs-validation" novalidate>
+                <input type="hidden" asp-for="Id" />
 
-	<label class="col-form-label" asp-for="CrsDuration">Duration</label><br />
-	<input class="form-control-sm" asp-for="CrsDuration" placeholder="Enter Duration In Hours!" /><span class="text-danger" asp-validation-for="CrsDuration"></span><br /><br />
+                <div class="mb-4">
+                    <label asp-for="CrsName" class="form-label fw-semibold">Course Name</label>
+                    <input asp-for="CrsName" class="form-control form-control-lg rounded-3" placeholder="Enter course name..." />
+                    <span class="text-danger small" asp-validation-for="CrsName"></span>
+                </div>
 
-	<input type="submit" class="btn btn-success" value="Add" />
-</form>
+                <div class="mb-4">
+                    <label asp-for="CrsDuration" class="form-label fw-semibold">Duration (Hours)</label>
+                    <input asp-for="CrsDuration" class="form-control form-control-lg rounded-3" placeholder="Enter duration in hours..." />
+                    <span class="text-danger small" asp-validation-for="CrsDuration"></span>
+                </div>
+
+                <div class="d-flex justify-content-center gap-3 mt-4">
+                    <button type="submit" class="btn btn-success btn-lg px-5 shadow-sm rounded-pill">
+                        <i class="bi bi-plus-circle me-2"></i> Add Course
+                    </button>
+                    <a asp-action="Index" class="btn btn-outline-secondary btn-lg px-5 rounded-pill">
+                        <i class="bi bi-arrow-left-circle me-2"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
-	<partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial" />
 }
+
+<style>
+    body {
+        background-color: #f8f9fc;
+    }
+
+    .card {
+        animation: slideUp 0.7s ease-in-out;
+    }
+
+    @@keyframes slideUp {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    .btn-success {
+        background: linear-gradient(135deg, #198754, #28a745);
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #157347, #198754);
+            transform: scale(1.05);
+        }
+
+    .btn-outline-secondary:hover {
+        background-color: #e9ecef;
+        transform: scale(1.05);
+    }
+</style>

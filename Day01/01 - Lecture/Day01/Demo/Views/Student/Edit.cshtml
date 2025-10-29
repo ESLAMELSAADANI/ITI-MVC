@@ -1,35 +1,94 @@
 ﻿@model StudentDepartment
 @{
-	ViewData["Title"] = "Edit";
-	SelectList deptsSL = new SelectList(Model.Departments, "DeptId", "DeptName");
+    ViewData["Title"] = "Edit Student";
+    SelectList deptsSL = new SelectList(Model.Departments, "DeptId", "DeptName");
 }
 
-<h1>Edit Student <span class="text-primary">@Model.Student.Name</span></h1>
-<form method="post">
-	<input type="hidden" asp-for="@Model.Student.Id" />
+<div class="container my-5">
+    <h1 class="mb-4 text-center">
+        Edit Student <span class="text-primary">@Model.Student.Name</span>
+    </h1>
 
-	<label class="col-form-label" asp-for="@Model.Student.Name">Name</label><br />
-	<input class="form-control-sm" type="text" asp-for="@Model.Student.Name" /><span class="text-danger" asp-validation-for="Student.Name"></span><br /><br />
+    <form method="post" class="shadow-sm p-4 rounded-4 bg-white">
+        <input type="hidden" asp-for="Student.Id" />
 
-	<label class="col-form-label" asp-for="@Model.Student.Age">Age</label><br />
-	<input class="form-control-sm" type="number" asp-for="@Model.Student.Age" /><span class="text-danger" asp-validation-for="Student.Age"></span><br /><br />
+        <div class="mb-3">
+            <label class="form-label fw-semibold" asp-for="Student.Name">Name</label>
+            <input class="form-control form-control-sm" type="text" asp-for="Student.Name" placeholder="Enter student name" />
+            <span class="text-danger" asp-validation-for="Student.Name"></span>
+        </div>
 
-	<label class="col-form-label" asp-for="@Model.Student.Email">Email</label><br />
-	<input class="form-control-sm" placeholder="example@email.com" type="email" asp-for="@Model.Student.Email" /><span class="text-danger" asp-validation-for="Student.Email"></span><br /><br />
+        <div class="mb-3">
+            <label class="form-label fw-semibold" asp-for="Student.Age">Age</label>
+            <input class="form-control form-control-sm" type="number" asp-for="Student.Age" placeholder="Enter age" />
+            <span class="text-danger" asp-validation-for="Student.Age"></span>
+        </div>
 
-	<label class="col-form-label" asp-for="@Model.Student.DeptNo">DeptName</label><br />
-	<select class="form-select-sm" asp-items="deptsSL" asp-for="@Model.Student.DeptNo">
-	</select><span class="text-danger" asp-validation-for="Student.DeptNo"></span><br /><br />
+        <div class="mb-3">
+            <label class="form-label fw-semibold" asp-for="Student.Email">Email</label>
+            <input class="form-control form-control-sm" type="email" asp-for="Student.Email" placeholder="example@email.com" />
+            <span class="text-danger" asp-validation-for="Student.Email"></span>
+        </div>
 
-	<label class="col-form-label" asp-for="@Model.Student.Password">New Password</label><br />
-	<input class="form-control-sm" placeholder="*********" type="password" asp-for="@Model.Student.Password" /><span class="text-danger" asp-validation-for="Student.Password"></span><br /><br />
+        <div class="mb-3">
+            <label class="form-label fw-semibold" asp-for="Student.DeptNo">Department</label>
+            <select class="form-select form-select-sm" asp-items="deptsSL" asp-for="Student.DeptNo">
+                <option value="">Select Department</option>
+            </select>
+            <span class="text-danger" asp-validation-for="Student.DeptNo"></span>
+        </div>
 
-	<label class="col-form-label" asp-for="@Model.Student.ConfirmPassword">Confirm Password</label><br />
-	<input class="form-control-sm" placeholder="*********" type="password" asp-for="@Model.Student.ConfirmPassword" /><span class="text-danger" asp-validation-for="Student.ConfirmPassword"></span><br /><br />
+        <div class="mb-3">
+            <label class="form-label fw-semibold" asp-for="Student.Password">New Password</label>
+            <input class="form-control form-control-sm" type="password" asp-for="Student.Password" placeholder="*********" />
+            <span class="text-danger" asp-validation-for="Student.Password"></span>
+        </div>
 
+        <div class="mb-3">
+            <label class="form-label fw-semibold" asp-for="Student.ConfirmPassword">Confirm Password</label>
+            <input class="form-control form-control-sm" type="password" asp-for="Student.ConfirmPassword" placeholder="*********" />
+            <span class="text-danger" asp-validation-for="Student.ConfirmPassword"></span>
+        </div>
 
-	<button asp-controller="Student" asp-action="edit" class="btn btn-primary">Edit</button>
-</form>
+        <div class="d-flex justify-content-center mt-3">
+            <button type="submit" class="btn btn-primary btn-lg">
+                <i class="bi bi-pencil-square"></i> Update
+            </button>
+        </div>
+    </form>
+</div>
+
 @section Scripts {
-	<partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial" />
 }
+
+<style>
+    body {
+        background: linear-gradient(135deg, #f8f9fa, #e3f2fd);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    form {
+        max-width: 600px;
+        margin: auto;
+    }
+
+    .form-label {
+        margin-bottom: 0.25rem;
+    }
+
+    .btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        transition: all 0.2s ease-in-out;
+    }
+
+    @@media (max-width: 768px) {
+        .btn
+
+    {
+        width: 100%;
+    }
+
+    }
+</style>
