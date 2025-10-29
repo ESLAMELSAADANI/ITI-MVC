@@ -1,5 +1,6 @@
 using Day06_Demo.CustomFilters;
 using Day06_Demo.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -14,16 +15,16 @@ namespace Day06_Demo.Controllers
         {
             _logger = logger;
         }
-
         public IActionResult Index()
         {
             return View();
         }
-        [MyExceptionFilter]
+        //[MyExceptionFilter]
+        [Authorize(Roles ="Instructor,Admin")]
         public IActionResult About()
         {
-            Console.WriteLine("In About() Action");
-            int x = int.Parse("Exception");
+            //Console.WriteLine("In About() Action");
+            //int x = int.Parse("Exception");
             return View();
         }
 

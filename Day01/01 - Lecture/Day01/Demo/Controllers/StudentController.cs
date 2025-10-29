@@ -173,19 +173,19 @@ namespace Demo.Controllers
             //studentRepo.Dispose();
             return RedirectToAction("index");
         }
-        [HttpPost]
-        public IActionResult Delete(StudentDepartment stdDept)
-        {
-            //dbContext.Students.Remove(stdDept.Student);
-            //dbContext.SaveChanges();
-            //return RedirectToAction("index");
+        //[HttpPost]
+        //public IActionResult Delete(StudentDepartment stdDept)
+        //{
+        //    //dbContext.Students.Remove(stdDept.Student);
+        //    //dbContext.SaveChanges();
+        //    //return RedirectToAction("index");
 
-            //====== Repository Pattern ========
-            studentRepo.Delete(stdDept.Student.Id);
-            studentRepo.Save();
-            //studentRepo.Dispose();
-            return RedirectToAction("index");
-        }
+        //    //====== Repository Pattern ========
+        //    studentRepo.Delete(stdDept.Student.Id);
+        //    studentRepo.Save();
+        //    //studentRepo.Dispose();
+        //    return RedirectToAction("index");
+        //}
         public IActionResult EmailExist([FromQuery(Name = "Student.Email")] string Student_Email)
         {
             bool isExist = studentEmailExist.IsEmailExist(Student_Email);
