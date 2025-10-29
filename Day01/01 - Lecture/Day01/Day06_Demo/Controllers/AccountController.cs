@@ -63,10 +63,10 @@ namespace Day06_Demo.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await userExtraRepo.GetUserByEmailPasswordAsync(model.Email, model.Password,model.UserName);
+                var user = await userExtraRepo.GetUserByEmailPasswordAsync(model.Email, model.Password, model.UserName);
                 if (user != null)
                 {
-                    
+
                     List<Claim> claims = new List<Claim>()
                     {
                         new Claim("Id", user.Id.ToString()),
@@ -79,7 +79,7 @@ namespace Day06_Demo.Controllers
                         claims.Add(new Claim(ClaimTypes.Role, role.RoleName));
                     }
 
-                    ClaimsIdentity identity = new ClaimsIdentity(claims,"MyCookieAuth");
+                    ClaimsIdentity identity = new ClaimsIdentity(claims, "MyCookieAuth");
 
                     ClaimsPrincipal principal = new ClaimsPrincipal(identity);
 
