@@ -7,9 +7,13 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures.Buffers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Demo.Repos;
+using Microsoft.AspNetCore.Authorization;
+using ModelsLayer;
+using System.Threading.Tasks;
 
 namespace Demo.Controllers
 {
+    [Authorize]
     public class StudentController : Controller
     {
         //ITIDbContext dbContext = new ITIDbContext();
@@ -21,15 +25,16 @@ namespace Demo.Controllers
         //===== Dependency Injection ========
         IEntityRepo<Student> studentRepo;
         IEntityRepo<Department> departmentRepo;
-        IEmailExist studentEmailExist;
+        IStudentRepoExtra studentRepoExtra;
+        UserManager<ApplicationUser> userManager;
 
-        public StudentController(IEntityRepo<Student> _studentRepo, IEntityRepo<Department> _departmentRepo, IEmailExist _studentEmailExist)
+        public StudentController(IEntityRepo<Student> _studentRepo, IEntityRepo<Department> _departmentRepo, IStudentRepoExtra _studentRepoExtra, UserManager<ApplicationUser> _userManager)
         {
             studentRepo = _studentRepo;
             departmentRepo = _departmentRepo;
-            studentEmailExist = _studentEmailExist;
+            studentRepoExtra = _studentRepoExtra;
+            userManager = _userManager;
         }
-
         public IActionResult Index()
         {
             //int x = int.Parse("ssss");//Simulate there are exception to test Development and production Environment.
@@ -51,6 +56,7 @@ namespace Demo.Controllers
             //studentRepo.Dispose();
             return View(student);
         }
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult Add()
         {
@@ -65,40 +71,56 @@ namespace Demo.Controllers
             //departmentRepo.Dispose();
             return View(studentDepartment);
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost]
-        public IActionResult Add(StudentDepartment studentDepartment)
+        public async Task<IActionResult> Add(StudentDepartment studentDepartment)
         {
-            //dbContext.Students.Add(student);
-            //dbContext.SaveChanges();
-            //return RedirectToAction("index");
-
-            //==== Repository Design Pattern =========
-            //==== Validation On student properties values ====
-            //if (studentEmailExist.IsEmailExist(studentDepartment.Student.Email))
-            //    ModelState.AddModelError("Email", "This email is already in use.");
-            if (studentEmailExist.IsEmailExist(studentDepartment.Student.Email))
-                ModelState.AddModelError("Student.Email", "This email is already in use.");
-
+            var existingUserUserName = await userManager.FindByNameAsync(studentDepartment.Student.Name);
+            if (existingUserUserName != null)
+            {
+                ModelState.AddModelError("Student.Name", "UserName Exists!");
+            }
+            var existingUserEmail = await userManager.FindByEmailAsync(studentDepartment.Student.Email);
+            if (existingUserEmail != null)
+            {
+                ModelState.AddModelError("Student.Email", "Email Exists!");
+            }
             if (ModelState.IsValid)
             {
-                var hasher = new PasswordHasher<Student>();
+                ApplicationUser user = new ApplicationUser()
+                {
+                    UserName = studentDepartment.Student.Name,
+                    Age = studentDepartment.Student.Age,
+                    Email = studentDepartment.Student.Email,
 
-                // Hash the password before saving it
-                studentDepartment.Student.Password = hasher.HashPassword(studentDepartment.Student, studentDepartment.Student.Password);
+                };
+                var createResult = await userManager.CreateAsync(user, studentDepartment.Student.Password);
+                if (!createResult.Succeeded)
+                {
+                    foreach (var error in createResult.Errors)
+                        ModelState.AddModelError("", error.Description);
+
+                    var deptss = departmentRepo.GetAll();
+                    studentDepartment.Departments = deptss.ToList();
+                    return View(studentDepartment);
+                }
+                studentDepartment.Student.UserId = user.Id;
 
                 studentRepo.Insert(studentDepartment.Student);
-                //studentRepo.Update(student);
-                //studentRepo.Delete(student.Id);
                 studentRepo.Save();
-                //studentRepo.Dispose();
+
+                await userManager.AddToRolesAsync(user, new List<string>() { "User", "Student" });
+
                 return RedirectToAction("index");
             }
 
-            studentDepartment.Departments = departmentRepo.GetAll();
-            //departmentRepo.Dispose();
+            var depts = departmentRepo.GetAll();
+            studentDepartment.Departments = depts.ToList();
+
             return View(studentDepartment);
 
         }
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult Edit(int? id)
         {
@@ -120,6 +142,7 @@ namespace Demo.Controllers
             //departmentRepo.Dispose();
             return View(studentDepartment);
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult Edit(Student student)
         {
@@ -128,7 +151,7 @@ namespace Demo.Controllers
             //return RedirectToAction("index");
 
             //===== Repository Design Pattern =======
-            if (studentEmailExist.IsEmailExist(student.Email))
+            if (studentRepoExtra.IsEmailExist(student.Email, student.Id))
                 ModelState.AddModelError("Student.Email", "This email is already in use.");
             if (ModelState.IsValid)
             {
@@ -150,8 +173,9 @@ namespace Demo.Controllers
             };
             return View(model);
         }
+        [Authorize(Roles = "Admin")]
         [HttpGet]
-        public IActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
                 return BadRequest();
@@ -167,28 +191,18 @@ namespace Demo.Controllers
             //return RedirectToAction("index");
 
             //====== Repository Pattern ======
-
+            var user = await userManager.FindByEmailAsync(student.Email);
+            if (user != null)
+                await userManager.RemoveFromRoleAsync(user, "Student");
             studentRepo.Delete(id.Value);
             studentRepo.Save();
             //studentRepo.Dispose();
             return RedirectToAction("index");
         }
-        //[HttpPost]
-        //public IActionResult Delete(StudentDepartment stdDept)
-        //{
-        //    //dbContext.Students.Remove(stdDept.Student);
-        //    //dbContext.SaveChanges();
-        //    //return RedirectToAction("index");
-
-        //    //====== Repository Pattern ========
-        //    studentRepo.Delete(stdDept.Student.Id);
-        //    studentRepo.Save();
-        //    //studentRepo.Dispose();
-        //    return RedirectToAction("index");
-        //}
-        public IActionResult EmailExist([FromQuery(Name = "Student.Email")] string Student_Email)
+        [AllowAnonymous]
+        public IActionResult EmailExist([FromQuery(Name = "Student.Email")] string Student_Email, [FromQuery(Name = "Student.Id")] int id)
         {
-            bool isExist = studentEmailExist.IsEmailExist(Student_Email);
+            bool isExist = studentRepoExtra.IsEmailExist(Student_Email, id);
             if (isExist == true)
                 return Json(false);
             else

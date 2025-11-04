@@ -1,6 +1,7 @@
 using Demo.DAL;
 using Demo.Repos;
 using Demo.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ModelsLayer;
 using ModelsLayer.Models;
@@ -19,10 +20,18 @@ namespace Demo
             builder.Services.AddScoped<IEntityRepo<Student>, StudentRepo>();
             builder.Services.AddScoped<IEntityRepo<Course>, CourseRepo>();
             builder.Services.AddScoped<IEntityRepo<StudentCourse>, StudentCourseRepo>();
-            builder.Services.AddScoped<IGetStudentCourse,StudentCourseRepo>();
-            builder.Services.AddScoped<IEmailExist, StudentRepo>();
+            builder.Services.AddScoped<IGetStudentCourse, StudentCourseRepo>();
+            builder.Services.AddScoped<IStudentRepoExtra, StudentRepo>();
             builder.Services.AddScoped<IIdExist, DepartmentRepo>();
-
+            builder.Services.AddScoped<UserRepoExtra, UserRepoExtra>();
+            builder.Services.AddAuthentication("MyCookieAuth")
+                            .AddCookie("MyCookieAuth", options =>
+                            {
+                                options.Cookie.Name = "MyCookieAuth";
+                                options.LoginPath = "/Account/Login";
+                                options.AccessDeniedPath = "/Account/AccessDenied";
+                            });
+            builder.Services.AddIdentity<ApplicationUser, ApplicationRole>().AddEntityFrameworkStores<ITIDbContext>();
             //===== Use Default Constructor Of ITIDbContext When Make object from it and use OnConfiguring() of it which define the connectionString =======
             //builder.Services.AddScoped<ITIDbContext, ITIDbContext>();
             //builder.Services.AddScoped<ITIDbContext>();//Also Can Write This if the name of key same as value.
@@ -32,7 +41,7 @@ namespace Demo
             builder.Services.AddDbContext<ITIDbContext>(options =>
             {
                 //options.UseSqlServer("Data Source=.;Initial Catalog=ITIMVC;Integrated Security=True;Trust Server Certificate=True");
-                options.UseSqlServer(builder.Configuration.GetConnectionString("ITIMVC_Conn"));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("ITIMVCAuth_Conn"));
             }/*,ServiceLifetime.Singleton*/);
             var app = builder.Build();
 
@@ -45,11 +54,13 @@ namespace Demo
 
             app.UseRouting();
 
+            app.UseAuthentication();
+
             app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=student}/{action=index}/{id:int?}");//Start With ControllerName
+                pattern: "{controller=student}/{action=index}/{id?}");//Start With ControllerName
                                                                           //pattern: "{action=index}/{controller=student}/{id:int?}");//Start With ActionName
                                                                           //pattern: "ITI/{controller=student}/{action=index}/{id:int?}");//Start URL with static value
             app.Run();

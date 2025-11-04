@@ -4,6 +4,7 @@ using Demo.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Demo.Migrations
 {
     [DbContext(typeof(ITIDbContext))]
-    partial class ITIDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251103113603_IdentityTables")]
+    partial class IdentityTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -154,32 +157,6 @@ namespace Demo.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "f69a910e-11da-4b5e-a9bf-c18f189a7c18",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = "6f781404-8f89-4699-93ea-415a714f1d8c",
-                            Name = "Student",
-                            NormalizedName = "STUDENT"
-                        },
-                        new
-                        {
-                            Id = "d58d3875-d822-4283-8537-21c965172bf9",
-                            Name = "User",
-                            NormalizedName = "USER"
-                        },
-                        new
-                        {
-                            Id = "7add2ebe-4eec-4a32-a0de-701f06774bc9",
-                            Name = "Instructor",
-                            NormalizedName = "INSTRUCTOR"
-                        });
                 });
 
             modelBuilder.Entity("ModelsLayer.ApplicationUser", b =>
@@ -232,6 +209,9 @@ namespace Demo.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("StudentId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -250,26 +230,9 @@ namespace Demo.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.ToTable("AspNetUsers", (string)null);
+                    b.HasIndex("StudentId");
 
-                    b.HasData(
-                        new
-                        {
-                            Id = "a6797cb1-bac8-4c0e-9bf6-e29b6e74dfc2",
-                            AccessFailedCount = 0,
-                            Age = 23,
-                            ConcurrencyStamp = "STATIC-CONCURRENCY-STAMP",
-                            Email = "eslam@gmail.com",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "ESLAM@GMAIL.COM",
-                            NormalizedUserName = "ESLAM ELSAADANY",
-                            PasswordHash = "AQAAAAIAAYagAAAAEKHr+lr2tsvTe8ijmGJqPIUpruCb2HRoxXcYEnOvAtgcshi89rBpcwf6n6hx5kxpKQ==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "STATIC-SECURITY-STAMP",
-                            TwoFactorEnabled = false,
-                            UserName = "Eslam Elsaadany"
-                        });
+                    b.ToTable("AspNetUsers", (string)null);
                 });
 
             modelBuilder.Entity("ModelsLayer.ApplicationUserRole", b =>
@@ -285,13 +248,6 @@ namespace Demo.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "a6797cb1-bac8-4c0e-9bf6-e29b6e74dfc2",
-                            RoleId = "f69a910e-11da-4b5e-a9bf-c18f189a7c18"
-                        });
                 });
 
             modelBuilder.Entity("ModelsLayer.Course", b =>
@@ -427,16 +383,9 @@ namespace Demo.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("DeptNo");
-
-                    b.HasIndex("UserId")
-                        .IsUnique()
-                        .HasFilter("[UserId] IS NOT NULL");
 
                     b.ToTable("Students");
                 });
@@ -510,6 +459,15 @@ namespace Demo.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ModelsLayer.ApplicationUser", b =>
+                {
+                    b.HasOne("ModelsLayer.Models.Student", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId");
+
+                    b.Navigation("Student");
+                });
+
             modelBuilder.Entity("ModelsLayer.ApplicationUserRole", b =>
                 {
                     b.HasOne("ModelsLayer.ApplicationRole", null)
@@ -533,13 +491,7 @@ namespace Demo.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ModelsLayer.ApplicationUser", "User")
-                        .WithOne("Student")
-                        .HasForeignKey("ModelsLayer.Models.Student", "UserId");
-
                     b.Navigation("Department");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ModelsLayer.StudentCourse", b =>
@@ -558,11 +510,6 @@ namespace Demo.Migrations
 
                     b.Navigation("Course");
 
-                    b.Navigation("Student");
-                });
-
-            modelBuilder.Entity("ModelsLayer.ApplicationUser", b =>
-                {
                     b.Navigation("Student");
                 });
 

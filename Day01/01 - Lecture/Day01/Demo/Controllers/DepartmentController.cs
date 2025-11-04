@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using Demo.Repos;
 using Demo.ViewModels;
 using ModelsLayer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Demo.Controllers
 {
-    //[Route("hamada/{action=index}/{id:int:max(500)?}")]
-    //[Route("hamada/{action=index}/{id:int:max(500)?}")]
+    [Authorize]
     public class DepartmentController : Controller
     {
         //ITIDbContext dbContext = new ITIDbContext();
@@ -38,6 +38,7 @@ namespace Demo.Controllers
             //departmentRepo.Dispose();
             return View(model);
         }
+        [Authorize(Roles ="Admin")]
         //Show The Form Of Add New Department
         [HttpGet] //ActionSelector say that this action work with Get Request Only
         public IActionResult Create()
@@ -45,6 +46,7 @@ namespace Demo.Controllers
             return View();
         }
         //Receive Data from request and save data to database.
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult Create(Department dept)
         {
@@ -78,6 +80,7 @@ namespace Demo.Controllers
             //departmentRepo.Dispose();
             return View(dept);
         }
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult Edit(int? id)
         {
@@ -96,6 +99,7 @@ namespace Demo.Controllers
             //departmentRepo.Dispose();
             return View(dept);
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult Edit(Department dept)
         {
@@ -119,6 +123,7 @@ namespace Demo.Controllers
             var department = departmentRepo.Get(id.Value);
             return View(department);
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult AddDepartmentCourse(DepartmentCoursesVM dept, int courseID)
         {
@@ -128,6 +133,7 @@ namespace Demo.Controllers
             departmentRepo.Save();
             return RedirectToAction("DepartmentCourses", new { id = dept.Department.DeptId });
         }
+        [Authorize(Roles = "Admin")]
         public IActionResult DeleteDepartmentCourse(Department dept, int courseID)
         {
             var department = departmentRepo.Get(dept.DeptId);
@@ -136,6 +142,7 @@ namespace Demo.Controllers
             departmentRepo.Save();
             return RedirectToAction("DepartmentCourses", new { id = dept.DeptId });
         }
+        [Authorize(Roles = "Admin")]
         public IActionResult DepartmentAddCourses(int id)
         {
             var department = departmentRepo.Get(id);
@@ -152,6 +159,7 @@ namespace Demo.Controllers
 
             return View(model);
         }
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult EditDepartmentCourses(int? id)
         {
@@ -168,6 +176,7 @@ namespace Demo.Controllers
             };
             return View(model);
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult EditDepartmentCourses(DepartmentCoursesVM model)
         {
@@ -196,6 +205,7 @@ namespace Demo.Controllers
             departmentRepo.Save();
             return RedirectToAction("DepartmentCourses", new { id = dept.DeptId });
         }
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult Delete(int? id)
         {
@@ -219,6 +229,7 @@ namespace Demo.Controllers
             }
             return RedirectToAction("index");
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult Delete(Department dept)
         {
@@ -236,11 +247,13 @@ namespace Demo.Controllers
             }
             return View("edit", dept);
         }
+        [AllowAnonymous]
         public IActionResult IdExist(int DeptId)
         {
             bool exist = departmentExist.IsIdExist(DeptId);
             return Json(!exist);
         }
+        [Authorize(Roles = "Admin")]
         public IActionResult ViewCourseStudents(int crsId, int deptID)
         {
             var department = departmentRepo.Get(deptID);
@@ -273,6 +286,7 @@ namespace Demo.Controllers
 
             return View(model);
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult UpdateDegree(DepartmentCourseStudentsVM model)
         {
@@ -316,6 +330,7 @@ namespace Demo.Controllers
             };
             return View("ViewCourseStudents", newModel);
         }
+        [Authorize(Roles = "Admin")]
         public IActionResult EnrollSelectedStudents(DepartmentCourseStudentsVM model)
         {
             if (ModelState.IsValid)
@@ -366,6 +381,7 @@ namespace Demo.Controllers
             };
             return View("ViewCourseStudents", newModel);
         }
+        [Authorize(Roles = "Admin")]
         public IActionResult DeleteStudentCourse(int stdID, int crsID, int deptId)
         {
             var studentCourse = StudentCourseRepoGet.Get(stdID, crsID);

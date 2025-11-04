@@ -4,6 +4,7 @@ using Demo.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Demo.Migrations
 {
     [DbContext(typeof(ITIDbContext))]
-    partial class ITIDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251103180439_SeedRolesAndAdminUser")]
+    partial class SeedRolesAndAdminUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -232,6 +235,9 @@ namespace Demo.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("StudentId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -249,6 +255,8 @@ namespace Demo.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("StudentId");
 
                     b.ToTable("AspNetUsers", (string)null);
 
@@ -427,16 +435,9 @@ namespace Demo.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("DeptNo");
-
-                    b.HasIndex("UserId")
-                        .IsUnique()
-                        .HasFilter("[UserId] IS NOT NULL");
 
                     b.ToTable("Students");
                 });
@@ -510,6 +511,15 @@ namespace Demo.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ModelsLayer.ApplicationUser", b =>
+                {
+                    b.HasOne("ModelsLayer.Models.Student", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId");
+
+                    b.Navigation("Student");
+                });
+
             modelBuilder.Entity("ModelsLayer.ApplicationUserRole", b =>
                 {
                     b.HasOne("ModelsLayer.ApplicationRole", null)
@@ -533,13 +543,7 @@ namespace Demo.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ModelsLayer.ApplicationUser", "User")
-                        .WithOne("Student")
-                        .HasForeignKey("ModelsLayer.Models.Student", "UserId");
-
                     b.Navigation("Department");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ModelsLayer.StudentCourse", b =>
@@ -558,11 +562,6 @@ namespace Demo.Migrations
 
                     b.Navigation("Course");
 
-                    b.Navigation("Student");
-                });
-
-            modelBuilder.Entity("ModelsLayer.ApplicationUser", b =>
-                {
                     b.Navigation("Student");
                 });
 

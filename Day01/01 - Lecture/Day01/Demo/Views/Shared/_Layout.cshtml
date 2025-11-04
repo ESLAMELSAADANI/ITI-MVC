@@ -1,159 +1,290 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims
+<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>@ViewData["Title"] - Demo</title>
+	<title>Academix - @ViewData["Title"]</title>
+
+	<!-- App Icon -->
+	<link rel="icon" type="image/png" href="~/icons/brain.png">
 
 	<!-- Bootstrap & Site Styles -->
 	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 	<link rel="stylesheet" href="~/Demo.styles.css" asp-append-version="true" />
 
-	<!-- Bootstrap Icons (optional but enhances UX) -->
+	<!-- Bootstrap Icons -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
 
 	<style>
-		/* Navbar Enhancements */
-		.navbar-dark .navbar-nav .nav-link {
-			color: #f8f9fa;
-			transition: color 0.2s ease, transform 0.2s ease;
+		:root {
+			--primary: #0d6efd;
+			--nav-bg: rgba(33, 37, 41, 0.9);
+			--footer-bg: #212529;
+			--text-light: #f8f9fa;
+			--text-muted: #ccc;
 		}
 
-			.navbar-dark .navbar-nav .nav-link:hover {
-				color: #0d6efd;
-				transform: translateY(-2px);
+		html, body {
+			height: 100%;
+			margin: 0;
+		}
+
+		body {
+			display: flex;
+			flex-direction: column;
+			min-height: 100vh;
+			background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			transition: background-color 0.3s ease;
+		}
+
+		header, footer {
+			flex-shrink: 0;
+		}
+
+		main {
+			flex-grow: 1;
+			padding-top: 90px;
+			animation: fadeIn 0.5s ease-in-out;
+		}
+
+		@@keyframes fadeIn {
+			from {
+				opacity: 0;
+				transform: translateY(10px);
 			}
 
-		.navbar-dark .dropdown-toggle {
-			color: #f8f9fa;
-			border: none;
-			transition: color 0.2s ease, transform 0.2s ease;
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
 		}
 
-			.navbar-dark .dropdown-toggle:hover {
-				color: #0d6efd;
+		/* ===== NAVBAR ===== */
+		.navbar {
+			backdrop-filter: blur(12px);
+			background: var(--nav-bg);
+			box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+			transition: all 0.3s ease;
+		}
+
+		.navbar-brand {
+			font-weight: 700;
+			font-size: 1.3rem;
+			color: var(--text-light) !important;
+			display: flex;
+			align-items: center;
+			gap: 8px;
+		}
+
+			.navbar-brand img {
+				width: 36px;
+				height: 36px;
+				transition: transform 0.4s ease;
+			}
+
+			.navbar-brand:hover img {
+				transform: rotate(-10deg) scale(1.1);
+			}
+
+		.navbar-nav .nav-link {
+			color: var(--text-light) !important;
+			font-weight: 500;
+			margin-right: 10px;
+			transition: all 0.25s ease;
+		}
+
+			.navbar-nav .nav-link:hover,
+			.navbar-nav .nav-link.active {
+				color: var(--primary) !important;
 				transform: translateY(-2px);
 			}
 
 		.dropdown-menu {
-			border-radius: 10px;
-			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+			border-radius: 12px;
+			border: none;
+			box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
 		}
 
-		.dropdown-item:hover {
-			background-color: #f1f1f1;
-			color: #0d6efd;
+		.dropdown-item {
+			font-size: 0.95rem;
+			transition: all 0.2s ease;
 		}
 
+			.dropdown-item:hover {
+				background-color: #e9f2ff;
+				color: var(--primary);
+				transform: translateX(4px);
+			}
+
+		.navbar-profile {
+			position: relative;
+			display: flex;
+			align-items: center;
+		}
+
+		.badge-admin {
+			background-color: #dc3545;
+		}
+
+		.badge-user {
+			background-color: #198754;
+		}
+
+		/* ===== FOOTER ===== */
 		footer {
-			background-color: #212529;
-			color: #ccc;
-			padding: 1rem 0;
+			background: var(--footer-bg);
+			color: var(--text-muted);
 			text-align: center;
+			padding: 1.2rem 0;
+			font-size: 0.9rem;
+			box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.25);
 		}
 
 			footer a {
-				color: #0d6efd;
-				text-decoration: none;
+				color: var(--primary);
+				margin: 0 8px;
+				transition: color 0.3s ease;
 			}
 
 				footer a:hover {
-					text-decoration: underline;
+					color: var(--text-light);
 				}
 
-		main {
-			min-height: 70vh;
+		/* RESPONSIVE */
+		@@media (max-width: 992px) {
+			.navbar-nav .nav-link {
+				margin-right: 0;
+				text-align: center;
+			}
+
+			footer .container {
+				flex-direction: column !important;
+				text-align: center;
+			}
 		}
 	</style>
 </head>
-
-<body class="d-flex flex-column min-vh-100 bg-light">
+<body>
+	<!-- NAVBAR -->
 	<header>
-		<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm py-3">
-			<div class="container-fluid">
-				<a class="navbar-brand fw-bold text-uppercase" asp-controller="Home" asp-action="Index">
-					<i class="bi bi-rocket-takeoff"></i> Demo
+		<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+			<div class="container-fluid px-4">
+				<a class="navbar-brand" asp-controller="Home" asp-action="Index">
+					<img src="~/icons/brain.png" alt="Academix Logo" />
+					Academix
 				</a>
-				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-						aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
 					<span class="navbar-toggler-icon"></span>
 				</button>
 
 				<div class="collapse navbar-collapse" id="navbarNav">
 					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+						<li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index"><i class="bi bi-house-door"></i> Home</a></li>
+						<li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Privacy"><i class="bi bi-shield-lock"></i> Privacy</a></li>
 
-						<li class="nav-item">
-							<a class="nav-link" asp-controller="Home" asp-action="Index"><i class="bi bi-house"></i> Home</a>
-						</li>
+						@if (User.Identity.IsAuthenticated)
+						{
+							<!-- Department -->
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"><i class="bi bi-building"></i> Department</a>
+								<ul class="dropdown-menu">
+									<li><a class="dropdown-item" asp-controller="Department" asp-action="Index"><i class="bi bi-list"></i> All Departments</a></li>
+									<li><a class="dropdown-item" asp-controller="Department" asp-action="Create"><i class="bi bi-plus-circle"></i> Add Department</a></li>
+								</ul>
+							</li>
 
-						<li class="nav-item">
-							<a class="nav-link" asp-controller="Home" asp-action="Privacy"><i class="bi bi-shield-lock"></i> Privacy</a>
-						</li>
+							<!-- Student -->
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"><i class="bi bi-person"></i> Student</a>
+								<ul class="dropdown-menu">
+									<li><a class="dropdown-item" asp-controller="Student" asp-action="Index"><i class="bi bi-list"></i> All Students</a></li>
+									<li><a class="dropdown-item" asp-controller="Student" asp-action="Add"><i class="bi bi-person-plus"></i> Add Student</a></li>
+								</ul>
+							</li>
 
-						<li class="nav-item">
-							<a class="nav-link" asp-controller="Test" asp-action="ShowAddForm"><i class="bi bi-plus-circle"></i> Show Add Form</a>
-						</li>
+							<!-- Course -->
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"><i class="bi bi-journal-text"></i> Course</a>
+								<ul class="dropdown-menu">
+									<li><a class="dropdown-item" asp-controller="Course" asp-action="Index"><i class="bi bi-list"></i> All Courses</a></li>
+									<li><a class="dropdown-item" asp-controller="Course" asp-action="Add"><i class="bi bi-plus-circle"></i> Add Course</a></li>
+								</ul>
+							</li>
 
-						<!-- Department Dropdown -->
-						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-								<i class="bi bi-building"></i> Department
-							</a>
-							<ul class="dropdown-menu">
-								<li><a class="dropdown-item" asp-controller="Department" asp-action="Index">All Departments</a></li>
-								<li><a class="dropdown-item" asp-controller="Department" asp-action="Create">Add Department</a></li>
-							</ul>
-						</li>
+							<!-- Users -->
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"><i class="bi bi-people"></i> Users</a>
+								<ul class="dropdown-menu">
+									<li><a class="dropdown-item" asp-controller="User" asp-action="Index"><i class="bi bi-list"></i> All Users</a></li>
+									<li><a class="dropdown-item" asp-controller="User" asp-action="Add"><i class="bi bi-person-plus"></i> Add User</a></li>
+								</ul>
+							</li>
 
-						<!-- Student Dropdown -->
-						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-								<i class="bi bi-person"></i> Student
-							</a>
-							<ul class="dropdown-menu">
-								<li><a class="dropdown-item" asp-controller="Student" asp-action="Index">All Students</a></li>
-								<li><a class="dropdown-item" asp-controller="Student" asp-action="Add">Add Student</a></li>
-							</ul>
-						</li>
-
-						<!-- Course Dropdown -->
-						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-								<i class="bi bi-journal-text"></i> Course
-							</a>
-							<ul class="dropdown-menu">
-								<li><a class="dropdown-item" asp-controller="Course" asp-action="Index">All Courses</a></li>
-								<li><a class="dropdown-item" asp-controller="Course" asp-action="Add">Add Course</a></li>
-							</ul>
-						</li>
+							<!-- Roles -->
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"><i class="bi bi-person-gear"></i> Roles</a>
+								<ul class="dropdown-menu">
+									<li><a class="dropdown-item" asp-controller="Role" asp-action="Index"><i class="bi bi-list"></i> All Roles</a></li>
+									<li><a class="dropdown-item" asp-controller="Role" asp-action="Add"><i class="bi bi-plus-circle"></i> Add Role</a></li>
+								</ul>
+							</li>
+						}
 					</ul>
 
-					<!-- Optional Right Side (e.g., User / Logout / Theme) -->
-					<ul class="navbar-nav ms-auto">
-						<li class="nav-item">
-							<a class="nav-link text-info" href="#"><i class="bi bi-person-circle"></i> Profile</a>
-						</li>
+					<!-- Right Section -->
+					<ul class="navbar-nav ms-auto align-items-center">
+						@if (!User.Identity.IsAuthenticated)
+						{
+							<li class="nav-item"><a class="nav-link" asp-controller="Account" asp-action="Register"><i class="bi bi-person-plus"></i> Register</a></li>
+							<li class="nav-item"><a class="nav-link" asp-controller="Account" asp-action="Login"><i class="bi bi-box-arrow-in-right"></i> Login</a></li>
+						}
+						else
+						{
+							<li class="nav-item me-3 position-relative">
+								<a class="nav-link navbar-profile" asp-controller="User" asp-action="Details" asp-route-id="@User.Claims.First().Value">
+									<i class="bi bi-person-circle fs-4"></i>
+								</a>
+								@{
+									var roles = User.Claims
+									.Where(c => c.Type == ClaimTypes.Role)
+									.Select(c => c.Value)
+									.ToList();
+
+									string roleClaim = roles.Contains("Admin", StringComparer.OrdinalIgnoreCase) ? "Admin" : "User";
+
+									string badgeClass = roleClaim == "Admin" ? "badge-admin" : "badge-user";
+								}
+								<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill @badgeClass">@roleClaim</span>
+							</li>
+							<li class="nav-item"><a class="nav-link" asp-controller="Account" asp-action="Logout"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+						}
 					</ul>
 				</div>
 			</div>
 		</nav>
 	</header>
 
-	<!-- Main Content -->
-	<div class="container my-4 flex-grow-1">
-		<main role="main" class="pb-4">
+	<!-- MAIN CONTENT -->
+	<main>
+		<div class="container py-3">
 			@RenderBody()
-		</main>
-	</div>
+		</div>
+	</main>
 
-	<!-- Footer -->
-	<footer class="mt-auto border-top">
-		<div class="container">
-			<p class="mb-0 small">
-				&copy; 2025 - <strong>Demo</strong> |
-				<a asp-controller="Home" asp-action="Privacy">Privacy Policy</a>
-			</p>
+	<!-- FOOTER -->
+	<footer>
+		<div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
+			<p class="mb-2 mb-md-0">&copy; @DateTime.Now.Year <strong>Academix</strong>. All Rights Reserved.</p>
+			<div>
+				<a href="https://facebook.com/profile.php?id=100009756554598" target="_blank"><i class="bi bi-facebook"></i></a>
+				<a href="https://instagram.com/eslam.el_saadany/" target="_blank"><i class="bi bi-instagram"></i></a>
+				<a href="https://linkedin.com/in/eslamelsaadany7/" target="_blank"><i class="bi bi-linkedin"></i></a>
+				<a href="https://github.com/ESLAMELSAADANI" target="_blank"><i class="bi bi-github"></i></a>
+			</div>
 		</div>
 	</footer>
 
@@ -161,6 +292,7 @@
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>
 	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="~/js/site.js" asp-append-version="true"></script>
+
 	@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

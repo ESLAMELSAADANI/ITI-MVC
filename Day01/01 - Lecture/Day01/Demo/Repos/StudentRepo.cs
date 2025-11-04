@@ -4,11 +4,13 @@ using ModelsLayer.Models;
 
 namespace Demo.Repos
 {
-    public interface IEmailExist
+    public interface IStudentRepoExtra
     {
-        bool IsEmailExist(string email);
+        bool IsEmailExist(string email, int id);
+        Task<Student> GetStudentByUserIdAsync(string userId);
+        Task<Student> GetStudentByEmailAsync(string email);
     }
-    public class StudentRepo : IEntityRepo<Student>,IEmailExist
+    public class StudentRepo : IEntityRepo<Student>, IStudentRepoExtra
     {
 
         //ITIDbContext dbContext = new ITIDbContext();
@@ -19,7 +21,7 @@ namespace Demo.Repos
         {
             dbContext = _dbContext;
         }
-        
+
         public void Delete(int id)
         {
             //dbContext.Students.Where(s => s.Id == id).ExecuteDelete();
@@ -44,14 +46,32 @@ namespace Demo.Repos
         {
             return dbContext.Students.Include(s => s.Department).ToList();
         }
+
+        public async Task<Student> GetStudentByEmailAsync(string email)
+        {
+            return await dbContext.Students.SingleOrDefaultAsync(s => s.Email == email);
+        }
+
+        public async Task<Student> GetStudentByUserIdAsync(string userId)
+        {
+            return await dbContext.Students.SingleOrDefaultAsync(s => s.UserId == userId);
+        }
+
         public Student Insert(Student student)
         {
             dbContext.Students.Add(student);//Add In App Memory
             return student;
         }
-        public bool IsEmailExist(string email)
+        public bool IsEmailExist(string email, int id)
         {
-            return dbContext.Students.Any(s => s.Email == email);
+            if (id == 0)
+                return false;
+            var existingStudent = dbContext.Students.SingleOrDefault(u => u.Email == email);
+            if (existingStudent == null)
+                return false;
+            if (existingStudent.Id == id)
+                return false;
+            return true;
         }
         public int Save()
         {
@@ -59,16 +79,19 @@ namespace Demo.Repos
         }
         public Student Update(Student student)
         {
-            dbContext.Students.Update(student);
-            return student;
+            var existing = dbContext.Students.FirstOrDefault(s => s.Id == student.Id);
+            if (existing != null)
+            {
+                // update only the fields you allow editing
+                existing.Name = student.Name;
+                existing.Email = student.Email;
+                existing.Age = student.Age;
+                existing.Password = student.Password;
+                existing.DeptNo = student.DeptNo;
+                existing.Password = student.Password;
+                existing.ConfirmPassword = student.ConfirmPassword;
+            }
+            return existing;
         }
-        //public void EditStudentsDept(int deptId)
-        //{
-        //    foreach (var student in db.Students)
-        //    {
-        //        student.DeptNo = randomDept.DeptId;
-        //        dbContext.Students.Update(student);
-        //    }
-        //}
     }
 }
