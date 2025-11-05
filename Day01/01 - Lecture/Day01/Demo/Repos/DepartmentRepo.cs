@@ -11,8 +11,6 @@ namespace Demo.Repos
 
     public class DepartmentRepo : IEntityRepo<Department>, IIdExist
     {
-        //ITIDbContext dbContext = new ITIDbContext();
-
         //====== Dependency Injection =======
         ITIDbContext dbContext;
 
@@ -47,17 +45,12 @@ namespace Demo.Repos
                 }
 
             }
-            //dbContext.Remove(dept);
         }
         public Department Details(int id)
         {
             var dept = dbContext.Department.SingleOrDefault(d => d.DeptId == id);
             return dept;
         }
-        //public void Dispose()
-        //{
-        //    dbContext.Dispose();
-        //}
         public Department Get(int id)
         {
             return dbContext.Department.Include(d => d.Courses).Include(d => d.Students).ThenInclude(d => d.StudentCourses).SingleOrDefault(d => d.DeptId == id);
@@ -68,8 +61,6 @@ namespace Demo.Repos
         }
         public Department Insert(Department department)
         {
-
-            //dbContext.Add(department);
             dbContext.Department.Add(department);
             return department;
         }

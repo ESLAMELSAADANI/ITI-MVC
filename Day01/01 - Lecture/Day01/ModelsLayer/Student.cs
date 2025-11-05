@@ -14,7 +14,7 @@ namespace ModelsLayer.Models
         [Range(10, 50, ErrorMessage = "Age must be between 10 and 50 years.")]//just validation in App, Not mapped to DB
         public int Age { get; set; }
         [RegularExpression("[a-zA-Z0-9_]+@[a-zA-Z]+.[a-zA-Z]{2,4}", ErrorMessage = "Enter Valid Email!")]//Validation Not Applied To DB - Validation For Application
-        [Remote("EmailExist", "Student",AdditionalFields ="Student.Id", ErrorMessage = "This Email Exist In DB!"), Required(ErrorMessage = "Email Is Required!")]
+        [Remote("EmailExist", "Student",AdditionalFields = "Id", ErrorMessage = "This Email Exist In DB!"), Required(ErrorMessage = "Email Is Required!")]
         public string Email { get; set; }
         [Required(ErrorMessage = "Password is required!"), MinLength(6, ErrorMessage = "Password Can't be less than 6")]
         public string Password { get; set; }

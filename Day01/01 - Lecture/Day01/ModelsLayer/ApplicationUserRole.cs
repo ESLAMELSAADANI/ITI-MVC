@@ -15,13 +15,5 @@ namespace ModelsLayer
         public override string UserId { get => base.UserId; set => base.UserId = value; }
         [ Required]
         public override string RoleId { get => base.RoleId; set => base.RoleId = value; }
-
-        //[ForeignKey("User"), Required]
-        //public int UserId { get; set; }
-        //[ForeignKey("Role"), Required]
-        //public int RoleId { get; set; }
-
-        //public User User { get; set; }
-        //public Role Role { get; set; }
     }
 }

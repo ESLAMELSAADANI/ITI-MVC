@@ -6,9 +6,6 @@ namespace Demo.ViewModels
     {
         public ApplicationUser User { get; set; }
 
-        //public List<ApplicationRole> RolesToDelete { get; set; } = new List<ApplicationRole>();
-        //public List<ApplicationRole> RolesToAdd { get; set; } = new List<ApplicationRole>();
-
         public List<string> RolesToDelete { get; set; } = new();
         public List<string> RolesToAdd { get; set; } = new();
 

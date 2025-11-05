@@ -10,18 +10,13 @@ using Demo.Repos;
 using Microsoft.AspNetCore.Authorization;
 using ModelsLayer;
 using System.Threading.Tasks;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Demo.Controllers
 {
     [Authorize]
     public class StudentController : Controller
     {
-        //ITIDbContext dbContext = new ITIDbContext();
-        //===== Repository Design Pattern ========
-        //IEntityRepo<Student> studentRepo = new StudentRepo();
-        //IEntityRepo<Department> departmentRepo = new DepartmentRepo();
-        //IEmailExist studentEmailExist = new StudentRepo();
-
         //===== Dependency Injection ========
         IEntityRepo<Student> studentRepo;
         IEntityRepo<Department> departmentRepo;
@@ -37,10 +32,7 @@ namespace Demo.Controllers
         }
         public IActionResult Index()
         {
-            //int x = int.Parse("ssss");//Simulate there are exception to test Development and production Environment.
-            //var students = dbContext.Students.Include(s => s.Department).ToList();//Load Related Data Through Navigational Property(EagerLoading) => Load Data Of Department also To Use It Inside View
             var students = studentRepo.GetAll();
-            //studentRepo.Dispose();
             return View(students);
         }
         public IActionResult Details(int? id)
@@ -50,25 +42,20 @@ namespace Demo.Controllers
             var student = studentRepo.Details(id.Value);
             if (student == null)
             {
-                //studentRepo.Dispose();
                 return NotFound();
             }
-            //studentRepo.Dispose();
             return View(student);
         }
         [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult Add()
         {
-            //ViewBag.depts = dbContext.Department.ToList();
-            //var depts = dbContext.Department.ToList();
             var depts = departmentRepo.GetAll();
             StudentDepartment studentDepartment = new StudentDepartment()
             {
                 Student = new Student(),
                 Departments = departmentRepo.GetAll()
             };
-            //departmentRepo.Dispose();
             return View(studentDepartment);
         }
         [Authorize(Roles = "Admin")]
@@ -126,11 +113,9 @@ namespace Demo.Controllers
         {
             if (id == null)
                 return BadRequest();
-            //var student = dbContext.Students.SingleOrDefault(s => s.Id == id);
             var student = studentRepo.Get(id.Value);
             if (student == null)
             {
-                //studentRepo.Dispose();
                 return NotFound();
             }
             var depts = departmentRepo.GetAll();
@@ -139,19 +124,15 @@ namespace Demo.Controllers
                 Student = student,
                 Departments = depts
             };
-            //departmentRepo.Dispose();
             return View(studentDepartment);
         }
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public IActionResult Edit(Student student)
+        public async Task<IActionResult> Edit(Student student)
         {
-            //dbContext.Students.Update(student);
-            //dbContext.SaveChanges();
-            //return RedirectToAction("index");
-
+            var existingStudent = studentRepo.Get(student.Id);
             //===== Repository Design Pattern =======
-            if (studentRepoExtra.IsEmailExist(student.Email, student.Id))
+            if (existingStudent != null && existingStudent.Id != student.Id)
                 ModelState.AddModelError("Student.Email", "This email is already in use.");
             if (ModelState.IsValid)
             {
@@ -161,7 +142,28 @@ namespace Demo.Controllers
 
                 studentRepo.Update(student);
                 studentRepo.Save();
-                //studentRepo.Dispose();
+                //Update Associated User
+                var user = await userManager.FindByEmailAsync(student.Email);
+                if (user != null)
+                {
+                    user.UserName = student.Name;
+                    user.Email = student.Email;
+                    user.Age = student.Age;
+                    user.NormalizedEmail = student.Email.ToUpper();
+                    user.NormalizedUserName = student.Name.ToUpper();
+                    user.PasswordHash = student.Password;
+                    user.ConfirmPassword = student.ConfirmPassword;
+                    var result = await userManager.UpdateAsync(user);
+                    if (!result.Succeeded)
+                    {
+                        foreach (var error in result.Errors)
+                        {
+                            ModelState.AddModelError("", error.Description);
+                        }
+                        return View();
+                    }
+                    return RedirectToAction("index");
+                }
                 return RedirectToAction("index");
             }
             var depts = departmentRepo.GetAll();
@@ -179,16 +181,11 @@ namespace Demo.Controllers
         {
             if (id == null)
                 return BadRequest();
-            //var student = dbContext.Students.SingleOrDefault(s => s.Id == id);
             var student = studentRepo.Get(id.Value);
             if (student == null)
             {
-                //studentRepo.Dispose();
                 return NotFound();
             }
-            //dbContext.Students.Remove(student);
-            //dbContext.SaveChanges();
-            //return RedirectToAction("index");
 
             //====== Repository Pattern ======
             var user = await userManager.FindByEmailAsync(student.Email);
@@ -196,7 +193,6 @@ namespace Demo.Controllers
                 await userManager.RemoveFromRoleAsync(user, "Student");
             studentRepo.Delete(id.Value);
             studentRepo.Save();
-            //studentRepo.Dispose();
             return RedirectToAction("index");
         }
         [AllowAnonymous]

@@ -12,10 +12,6 @@ namespace Demo.Repos
     }
     public class StudentRepo : IEntityRepo<Student>, IStudentRepoExtra
     {
-
-        //ITIDbContext dbContext = new ITIDbContext();
-
-        //====== Dependency Injection =======
         ITIDbContext dbContext;
         public StudentRepo(ITIDbContext _dbContext)////Constructor Injection [DIC Will Inject The Object Here]
         {
@@ -24,7 +20,6 @@ namespace Demo.Repos
 
         public void Delete(int id)
         {
-            //dbContext.Students.Where(s => s.Id == id).ExecuteDelete();
             var student = dbContext.Students.SingleOrDefault(s => s.Id == id);
             dbContext.Students.Remove(student);//Delete in App Memory
         }
@@ -33,11 +28,6 @@ namespace Demo.Repos
             var student = dbContext.Students.Include(s => s.Department).SingleOrDefault(s => s.Id == id);
             return student;
         }
-        //Not need to use it, bcz dependency injection automatically dispose object created after lifetime of it end
-        //public void Dispose()
-        //{
-        //    dbContext.Dispose();
-        //}
         public Student Get(int id)
         {
             return dbContext.Students.SingleOrDefault(s => s.Id == id);
@@ -46,17 +36,14 @@ namespace Demo.Repos
         {
             return dbContext.Students.Include(s => s.Department).ToList();
         }
-
         public async Task<Student> GetStudentByEmailAsync(string email)
         {
             return await dbContext.Students.SingleOrDefaultAsync(s => s.Email == email);
         }
-
         public async Task<Student> GetStudentByUserIdAsync(string userId)
         {
             return await dbContext.Students.SingleOrDefaultAsync(s => s.UserId == userId);
         }
-
         public Student Insert(Student student)
         {
             dbContext.Students.Add(student);//Add In App Memory

@@ -11,11 +11,6 @@ namespace Demo.Controllers
     [Authorize]
     public class DepartmentController : Controller
     {
-        //ITIDbContext dbContext = new ITIDbContext();
-        //===== Repository Design Pattern =======
-        //IEntityRepo<Department> departmentRepo = new DepartmentRepo();
-        //IIdExist departmentExist = new DepartmentRepo();
-
         //===== Dependency Injection ======
         IEntityRepo<Department> departmentRepo;
         IEntityRepo<Course> courseRepo;
@@ -30,35 +25,25 @@ namespace Demo.Controllers
             studentCourseRepo = _studentCourseRepo;
             StudentCourseRepoGet = _studentCourseRepoGet;
         }
-        //[Route("hamada")]
-        public IActionResult Index(/*[FromServices]IEntityRepo<Department> _departmentRepo*/)
+        public IActionResult Index()
         {
-            //var model = dbContext.Department.ToList();
             var model = departmentRepo.GetAll();
-            //departmentRepo.Dispose();
             return View(model);
         }
         [Authorize(Roles ="Admin")]
-        //Show The Form Of Add New Department
-        [HttpGet] //ActionSelector say that this action work with Get Request Only
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
-        //Receive Data from request and save data to database.
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult Create(Department dept)
         {
             if (ModelState.IsValid)
             {
-                //dbContext.Department.Add(dept);
-                //dbContext.SaveChanges();
-                //return RedirectToAction("index");
-
                 departmentRepo.Insert(dept);
                 departmentRepo.Save();
-                //departmentRepo.Dispose();
                 return RedirectToAction("index");
             }
             return View();
@@ -70,14 +55,11 @@ namespace Demo.Controllers
             {
                 return BadRequest();
             }
-            //var dept = dbContext.Department.SingleOrDefault(d => d.DeptId == id);
             var dept = departmentRepo.Get(id.Value);
             if (dept == null)//if user enter id not match any dept in DB => /department/details/88888
             {
-                //departmentRepo.Dispose();
                 return NotFound();
             }
-            //departmentRepo.Dispose();
             return View(dept);
         }
         [Authorize(Roles = "Admin")]
@@ -88,15 +70,11 @@ namespace Demo.Controllers
             {
                 return BadRequest();
             }
-            //var dept = dbContext.Department.SingleOrDefault(d => d.DeptId == id);
             var dept = departmentRepo.Get(id.Value);
             if (dept == null)//if user enter id not match any dept in DB => /department/edit/88888
             {
-                //departmentRepo.Dispose();
                 return NotFound();
             }
-
-            //departmentRepo.Dispose();
             return View(dept);
         }
         [Authorize(Roles = "Admin")]
@@ -105,13 +83,8 @@ namespace Demo.Controllers
         {
             if (ModelState.IsValid)
             {
-                //dbContext.Department.Update(dept);
-                //dbContext.SaveChanges();
-                //return RedirectToAction("index");
-
                 departmentRepo.Update(dept);
                 departmentRepo.Save();
-                //departmentRepo.Dispose();
                 return RedirectToAction("index");
             }
             var ddept = departmentRepo.Get(dept.DeptId);
@@ -216,15 +189,8 @@ namespace Demo.Controllers
                 return NotFound();
             if (ModelState.IsValid)
             {
-                //var dept = dbContext.Department.SingleOrDefault(d => d.DeptId == id);
-                //dbContext.Department.Remove(dept);
-                //dbContext.SaveChanges();
-                //return RedirectToAction("index");
-
-
                 departmentRepo.Delete(id.Value);
                 departmentRepo.Save();
-                //departmentRepo.Dispose();
                 return RedirectToAction("index");
             }
             return RedirectToAction("index");
@@ -235,11 +201,6 @@ namespace Demo.Controllers
         {
             if (ModelState.IsValid)
             {
-                ////var dept = dbContext.Department.SingleOrDefault(d => d.DeptId == id);
-                //dbContext.Department.Remove(dept);
-                //dbContext.SaveChanges();
-                //return RedirectToAction("index");
-
                 departmentRepo.Delete(dept.DeptId);
                 departmentRepo.Save();
                 //departmentRepo.Dispose();

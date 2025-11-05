@@ -189,48 +189,6 @@ namespace Demo.Controllers
             };
             return View(userRoleVM);
         }
-        //[Authorize(Roles = "Admin")]
-        //public async Task<IActionResult> DeleteUserRole(int roleId, int userID)
-        //{
-        //    UserRole userRole = await userRoleRepoExtra.GetAsync(userID, roleId);
-        //    userRoleRepo.Delete(userRole);
-        //    await userRoleRepo.SaveChangesAsync();
-
-        //    var user = await userRepo.GetByIdAsync(userID);
-        //    var rolesToDelete = await roleRepoExtra.GetUserRolesAsync(userID);
-        //    var rolesToAdd = await roleRepoExtra.GetUserAnotherRolesAsync(userID);
-
-        //    var model = new UserRoleVM()
-        //    {
-        //        User = user,
-        //        RolesToDelete = rolesToDelete,
-        //        RolesToAdd = rolesToAdd
-        //    };
-        //    //await HttpContext.SignOutAsync("MyCookieAuth");
-        //    //return RedirectToAction("Login","account");
-        //    return View("ViewRoles", model);
-        //}
-        //[Authorize(Roles = "Admin")]
-        //public async Task<IActionResult> AddUserRole(int roleId, int userID)
-        //{
-        //    UserRole userRole = new UserRole() { UserId = userID, RoleId = roleId };
-        //    await userRoleRepo.AddAsync(userRole);
-        //    await userRoleRepo.SaveChangesAsync();
-
-        //    var user = await userRepo.GetByIdAsync(userID);
-        //    var rolesToDelete = await roleRepoExtra.GetUserRolesAsync(userID);
-        //    var rolesToAdd = await roleRepoExtra.GetUserAnotherRolesAsync(userID);
-
-        //    var model = new UserRoleVM()
-        //    {
-        //        User = user,
-        //        RolesToDelete = rolesToDelete,
-        //        RolesToAdd = rolesToAdd
-        //    };
-        //    //await HttpContext.SignOutAsync("MyCookieAuth");
-        //    //return RedirectToAction("Login","account");
-        //    return View("ViewRoles", model);
-        //}
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteSelectedRoles(UserRoleVM model)
         {
