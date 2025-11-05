@@ -17,14 +17,16 @@ namespace Demo.Controllers
         RoleManager<ApplicationRole> roleManager;
         IStudentRepoExtra studentRepoExtra;
         IEntityRepo<Student> studentRepo;
+        IDepartmentRepoExtra departmentRepoExtra;
 
-        public UserController(UserRepoExtra _userRepoExtra, UserManager<ApplicationUser> _userManager, RoleManager<ApplicationRole> _roleManager, IStudentRepoExtra _studentRepoExtra, IEntityRepo<Student> _studentRepo)
+        public UserController(UserRepoExtra _userRepoExtra, UserManager<ApplicationUser> _userManager, RoleManager<ApplicationRole> _roleManager, IStudentRepoExtra _studentRepoExtra, IEntityRepo<Student> _studentRepo, IDepartmentRepoExtra _departmentRepoExtra)
         {
             userRepoExtra = _userRepoExtra;
             userManager = _userManager;
             roleManager = _roleManager;
             studentRepoExtra = _studentRepoExtra;
             studentRepo = _studentRepo;
+            departmentRepoExtra = _departmentRepoExtra;
         }
 
         public IActionResult Index()
@@ -199,6 +201,22 @@ namespace Demo.Controllers
             {
                 foreach (var roleName in model.RolesToDeleteNames)
                 {
+                    var firstDept = await departmentRepoExtra.GetFirstDeptAsync();
+                    if (roleName == "Student")
+                    {
+                        Student std = new Student()
+                        {
+                            Name = user.UserName,
+                            Age = user.Age,
+                            Email = user.Email,
+                            DeptNo = firstDept != null ? firstDept.DeptId : null,
+                            Password = user.PasswordHash,
+                            UserId = user.Id
+                        };
+                        var student = await studentRepoExtra.GetStudentByEmailAsync(std.Email);
+                        studentRepo.Delete(student.Id);
+                        studentRepo.Save();
+                    }
                     var result = await userManager.RemoveFromRoleAsync(user, roleName);
                     if (!result.Succeeded)
                     {
@@ -270,7 +288,6 @@ namespace Demo.Controllers
             return View("ViewRoles", updatedModel);
 
         }
-
         public async Task<IActionResult> EmailExist(string email, string id)
         {
             var emailExist = await userRepoExtra.IsEmailExistAsync(email, id);

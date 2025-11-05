@@ -4,12 +4,13 @@ using ModelsLayer.Models;
 
 namespace Demo.Repos
 {
-    public interface IIdExist
+    public interface IDepartmentRepoExtra
     {
         bool IsIdExist(int id);
+        Task<Department> GetFirstDeptAsync();
     }
 
-    public class DepartmentRepo : IEntityRepo<Department>, IIdExist
+    public class DepartmentRepo : IEntityRepo<Department>, IDepartmentRepoExtra
     {
         //====== Dependency Injection =======
         ITIDbContext dbContext;
@@ -59,6 +60,12 @@ namespace Demo.Repos
         {
             return dbContext.Department.Where(d => d.IsActive == true).ToList();//Just Returned Active Depts Which Contain Students.
         }
+
+        public Task<Department> GetFirstDeptAsync()
+        {
+            throw new NotImplementedException();
+        }
+
         public Department Insert(Department department)
         {
             dbContext.Department.Add(department);

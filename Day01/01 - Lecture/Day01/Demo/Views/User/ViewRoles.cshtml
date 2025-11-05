@@ -143,6 +143,11 @@
 					<form asp-action="AddSelectedRoles" method="post">
 						<input type="hidden" asp-for="User.Id" value="@Model.User.Id" />
 						<input type="hidden" asp-for="User.UserName" value="@Model.User.UserName" />
+						@* <input type="hidden" asp-for="User.NormalizedUserName" value="@Model.User.UserName.ToUpper()" />
+						<input type="hidden" asp-for="User.Email" value="@Model.User.Email" />
+						<input type="hidden" asp-for="User.NormalizedEmail" value="@Model.User.Email.ToUpper()" />
+						<input type="hidden" asp-for="User.Age" value="@Model.User.Age" />
+						<input type="hidden" asp-for="User.PasswordHash" value="@Model.User.PasswordHash" /> *@
 
 						<table class="table table-striped table-hover align-middle text-center">
 							<thead class="table-success">

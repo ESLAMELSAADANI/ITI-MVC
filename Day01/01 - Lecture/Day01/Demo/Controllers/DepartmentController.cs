@@ -16,8 +16,8 @@ namespace Demo.Controllers
         IEntityRepo<Course> courseRepo;
         IEntityRepo<StudentCourse> studentCourseRepo;
         IGetStudentCourse StudentCourseRepoGet;
-        IIdExist departmentExist;
-        public DepartmentController(IEntityRepo<Department> _departmentRepo, IIdExist _departmentExist, IEntityRepo<Course> _courseRepo, IEntityRepo<StudentCourse> _studentCourseRepo, IGetStudentCourse _studentCourseRepoGet)
+        IDepartmentRepoExtra departmentExist;
+        public DepartmentController(IEntityRepo<Department> _departmentRepo, IDepartmentRepoExtra _departmentExist, IEntityRepo<Course> _courseRepo, IEntityRepo<StudentCourse> _studentCourseRepo, IGetStudentCourse _studentCourseRepoGet)
         {
             departmentRepo = _departmentRepo;
             courseRepo = _courseRepo;

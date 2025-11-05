@@ -22,7 +22,7 @@ namespace Demo
             builder.Services.AddScoped<IEntityRepo<StudentCourse>, StudentCourseRepo>();
             builder.Services.AddScoped<IGetStudentCourse, StudentCourseRepo>();
             builder.Services.AddScoped<IStudentRepoExtra, StudentRepo>();
-            builder.Services.AddScoped<IIdExist, DepartmentRepo>();
+            builder.Services.AddScoped<IDepartmentRepoExtra, DepartmentRepo>();
             builder.Services.AddScoped<UserRepoExtra, UserRepoExtra>();
             builder.Services.AddAuthentication("MyCookieAuth")
                             .AddCookie("MyCookieAuth", options =>
